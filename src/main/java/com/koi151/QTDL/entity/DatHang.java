@@ -5,13 +5,13 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.List;
-@Entity(name = "datHang")
+@Entity(name = "dat_hang")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class DatHang {
+public class DatHang extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,13 +26,13 @@ public class DatHang {
     @JoinColumn(name = "maNV", nullable = false)  // Khóa ngoại tham chiếu tới NhanVien
     private NhanVien nhanVien;
 
+    @OneToMany(mappedBy = "datHang", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CTDatHang> dsCTDatHang;
+
     @Column(name = "ghiChu", columnDefinition = "TEXT")
     private String ghiChu;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "trangThai", nullable = false)
     private TrangThaiDatHang trangThai;
-
-    @OneToMany(mappedBy = "datHang", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<CTDatHang> dsCTDatHang;
 }

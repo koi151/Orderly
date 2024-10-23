@@ -6,13 +6,13 @@ import lombok.*;
 
 import java.util.List;
 
-@Entity(name = "vaiTro")
+@Entity(name = "vai_tro")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class VaiTro {
+public class VaiTro extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

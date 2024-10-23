@@ -7,13 +7,13 @@ import lombok.*;
 import java.math.BigDecimal;
 import java.util.List;
 
-@Entity(name = "sanPham")
+@Entity(name = "san_pham")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class SanPham {
+public class SanPham extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

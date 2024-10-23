@@ -3,13 +3,13 @@ package com.koi151.QTDL.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-@Entity(name = "daiLy")
+@Entity(name = "dai_ly")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class DaiLy {
+public class DaiLy extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

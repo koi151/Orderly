@@ -7,13 +7,13 @@ import lombok.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-@Entity(name = "CTDatHang")
+@Entity(name = "ct_dat_hang")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class CTDatHang {
+public class CTDatHang extends BaseEntity {
 
     @EmbeddedId
     private CTDatHangKey ctDatHangKey;

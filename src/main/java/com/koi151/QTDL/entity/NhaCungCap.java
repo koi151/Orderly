@@ -5,13 +5,13 @@ import lombok.*;
 
 import java.util.List;
 
-@Entity(name = "nhaCungCap")
+@Entity(name = "nha_cung_cap")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class NhaCungCap {
+public class NhaCungCap extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
