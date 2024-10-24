@@ -24,7 +24,6 @@ public class SanPham extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "maLoai")
-    @NotNull(message = "Thieu ma loai san pham")
     private LoaiSanPham loaiSanPham;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -32,13 +31,9 @@ public class SanPham extends BaseEntity {
     private NhaCungCap nhaCungCap;
 
     @Column(name = "tenSP", nullable = false, length = 100)
-    @NotBlank(message = "Thieu ten san pham")
-    @Size(max = 100, message = "Ma san pham khong vuot qua {max} ki tu")
     private String tenSP;
 
     @Column(name = "gia", precision = 10)
-    @NotNull(message = "Post service pricing cannot be empty")
-    @PositiveOrZero(message = "Post service pricing must be non-negative value")
-    @DecimalMax(value = "1000000000", message = "Post service pricing cannot exceed {value}")
+    @PositiveOrZero(message = "Gia khong duoc am")
     private BigDecimal gia;
 }

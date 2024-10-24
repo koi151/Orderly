@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class NhanVienDTO {
+public class NhanVienCreateDTO {
     private long maNV;
     private String hoTen;
     private String email;

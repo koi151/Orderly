@@ -23,12 +23,12 @@ public class BaseEntity implements Serializable {
     @CreatedDate
     @Column(name = "ngayTao", columnDefinition = "TIMESTAMP(0)",
         nullable = false, updatable = false)
-    private LocalDateTime createdDate;
+    private LocalDateTime ngayTao;
 
     @Column(name = "ngaySua", columnDefinition = "TIMESTAMP(0)", insertable = false)
     @LastModifiedDate
-    private LocalDateTime modifiedDate;
+    private LocalDateTime ngaySua;
 
     @Column(name = "deleted")
-    private boolean deleted = false;
+    private boolean daXoa = false;
 }

@@ -3,7 +3,7 @@ package com.koi151.QTDL.service.impl;
 
 import com.koi151.QTDL.entity.NhanVien;
 import com.koi151.QTDL.mapper.NhanVienMapper;
-import com.koi151.QTDL.model.dto.NhanVienDTO;
+import com.koi151.QTDL.model.dto.NhanVienCreateDTO;
 import com.koi151.QTDL.model.request.NhanVienRequest;
 import com.koi151.QTDL.repository.NhanVienRepository;
 import com.koi151.QTDL.service.NhanVienService;
@@ -22,7 +22,7 @@ public class NhanVienServiceImpl implements NhanVienService {
     private final NhanVienValidator nhanVienValidator;
 
     @Override
-    public NhanVienDTO taoTaiKhoan(NhanVienRequest request) {
+    public NhanVienCreateDTO taoTaiKhoan(NhanVienRequest request) {
         nhanVienValidator.validateNhanVienRequest(request);
         nhanVienValidator.validateUniqueNhanVien(request);
 
@@ -34,6 +34,6 @@ public class NhanVienServiceImpl implements NhanVienService {
             .build();
 
         NhanVien savedNV = nhanVienRepository.save(nv);
-        return nhanVienMapper.toNhanVienDTO(savedNV); // anh xa du lieu tu NhanVien sang NhanVienDTO
+        return nhanVienMapper.toNhanVienDTO(savedNV);
     }
 }

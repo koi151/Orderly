@@ -9,8 +9,7 @@ import java.util.List;
 @Repository
 public interface NhanVienRepository extends JpaRepository<NhanVien, Long> {
 
-    List<NhanVien> getAllByDeleted(Boolean deleted);
+    List<NhanVien> getAllByDaXoa(Boolean deleted);
 
     Boolean existsByEmailOrSdt(String email, String sdt);
-
 }

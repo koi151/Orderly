@@ -26,7 +26,6 @@ public class NhanVienController {
     @PostMapping("/")
     public ResponseEntity<ResponseData> taoTaiKhoan(
         @RequestBody @Valid NhanVienRequest request
-//        @RequestPart(required = false) MultipartFile avatar
     ) {
         var accountCreated = nhanVienService.taoTaiKhoan(request);
         return new ResponseEntity<>(
@@ -37,3 +36,4 @@ public class NhanVienController {
             , HttpStatus.CREATED);
     }
 }
+

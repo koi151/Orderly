@@ -19,7 +19,7 @@ public class DaiLy extends BaseEntity {
     private String tenDL;
 
     @Column(name = "diaChi", length = 100)
-    private String diaCHi;
+    private String diaChi;
 
     @Column(name = "sdt", length = 20)
     private String sdt;
