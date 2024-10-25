@@ -1,6 +1,7 @@
 package com.koi151.QTDL.controllerAdvice;
 
 import com.koi151.QTDL.customExceptions.EntityAlreadyExistsException;
+import com.koi151.QTDL.customExceptions.EntityNotExistedException;
 import com.koi151.QTDL.customExceptions.PasswordMismatchException;
 import com.koi151.QTDL.customExceptions.InvalidRequestException;
 import com.koi151.QTDL.model.response.ErrorResponse;
@@ -82,6 +83,14 @@ public class ControllerAdvisor {
         return ResponseEntity.status(HttpStatus.CONFLICT)
             .body(ErrorResponse.builder()
                 .error("Request body rỗng, yêu cầu không hợp lệ")
+                .details(Collections.singletonList(ex.getMessage()))
+                .build());
+    }
+    @ExceptionHandler(EntityNotExistedException.class)
+    public ResponseEntity<ErrorResponse> handleEntityNotExistedException(EntityNotExistedException ex) {
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+            .body(ErrorResponse.builder()
+                .error("Thực thể không tồn tại")
                 .details(Collections.singletonList(ex.getMessage()))
                 .build());
     }

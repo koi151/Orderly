@@ -9,7 +9,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class DaiLyRequest {
+public class DaiLyCreateRequest {
 
     @Size(max = 100, message = "Tên đại lý không vượt quá {max} kí tự")
     private String tenDL;

@@ -1,6 +1,6 @@
 package com.koi151.QTDL.controller;
 
-import com.koi151.QTDL.model.request.DaiLyRequest;
+import com.koi151.QTDL.model.request.DaiLyCreateRequest;
 import com.koi151.QTDL.model.response.ResponseData;
 import com.koi151.QTDL.service.DaiLyService;
 import jakarta.validation.Valid;
@@ -22,7 +22,7 @@ public class DaiLyController {
 
     @PostMapping("/")
     public ResponseEntity<ResponseData> taoDaiLy(
-        @RequestBody @NotNull @Valid DaiLyRequest request
+        @RequestBody @NotNull @Valid DaiLyCreateRequest request
     ) {
         var accountCreated = daiLyService.taoDaiLy(request);
         return new ResponseEntity<>(

@@ -1,7 +1,6 @@
 package com.koi151.QTDL.controller;
 
-import com.koi151.QTDL.model.request.NhanVienRequest;
-import com.koi151.QTDL.model.request.VaiTroRequest;
+import com.koi151.QTDL.model.request.VaiTroCreateRequest;
 import com.koi151.QTDL.model.response.ResponseData;
 import com.koi151.QTDL.service.VaiTroService;
 import jakarta.validation.Valid;
@@ -22,13 +21,13 @@ public class VaiTroController {
 
     @PostMapping("/")
     public ResponseEntity<ResponseData> taoVaiTro(
-        @RequestBody @Valid VaiTroRequest request
+        @RequestBody @Valid VaiTroCreateRequest request
     ) {
         var accountCreated = vaiTroService.taoVaiTro(request);
         return new ResponseEntity<>(
             ResponseData.builder()
                 .data(accountCreated)
-                .desc("Tao thanh cong tai khoan vai tro " + request.getTenVT())
+                .desc("Tạo thành công vai trò " + request.getTenVT())
                 .build()
             , HttpStatus.CREATED);
     }

@@ -1,12 +1,10 @@
 package com.koi151.QTDL.controller;
 
-import com.koi151.QTDL.model.request.LoaiSanPhamRequest;
-import com.koi151.QTDL.model.request.NhanVienRequest;
+import com.koi151.QTDL.model.request.LoaiSanPhamCreateRequest;
 import com.koi151.QTDL.model.response.ResponseData;
 import com.koi151.QTDL.service.LoaiSanPhamService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +22,7 @@ public class LoaiSanPhamController {
 
     @PostMapping("/")
     public ResponseEntity<ResponseData> taoTaiKhoan(
-        @RequestBody @NotNull @Valid LoaiSanPhamRequest request
+        @RequestBody @NotNull @Valid LoaiSanPhamCreateRequest request
     ) {
         var accountCreated = loaiSanPhamService.taoLoaiSP(request);
         return new ResponseEntity<>(

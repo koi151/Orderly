@@ -8,7 +8,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class LoaiSanPhamRequest {
+public class LoaiSanPhamCreateRequest {
 
     @Size(max = 100, message = "Ten loai san pham khong duoc qua {max} ki tu")
     private String tenLoai;

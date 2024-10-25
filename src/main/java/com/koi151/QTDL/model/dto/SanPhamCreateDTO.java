@@ -1,21 +1,15 @@
 package com.koi151.QTDL.model.dto;
 
-import com.koi151.QTDL.entity.LoaiSanPham;
-import com.koi151.QTDL.entity.NhaCungCap;
-import jakarta.persistence.*;
+import lombok.Builder;
+import lombok.Data;
 
 import java.math.BigDecimal;
 
-
+@Data
+@Builder
 public class SanPhamCreateDTO {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long maSP;
-
-//    private List<CTDatHang> dsCTDatHang;
-    private LoaiSanPham loaiSanPham;
-    private NhaCungCap nhaCungCap;
+    private String tenLoaiSP;
+    private String tenNCC;
     private String tenSP;
     private BigDecimal gia;
 }

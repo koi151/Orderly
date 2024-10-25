@@ -4,7 +4,7 @@ package com.koi151.QTDL.service.impl;
 import com.koi151.QTDL.entity.NhanVien;
 import com.koi151.QTDL.mapper.NhanVienMapper;
 import com.koi151.QTDL.model.dto.NhanVienCreateDTO;
-import com.koi151.QTDL.model.request.NhanVienRequest;
+import com.koi151.QTDL.model.request.NhanVienCreateRequest;
 import com.koi151.QTDL.repository.NhanVienRepository;
 import com.koi151.QTDL.service.NhanVienService;
 import com.koi151.QTDL.utils.PasswordEncoderUtil;
@@ -22,7 +22,7 @@ public class NhanVienServiceImpl implements NhanVienService {
     private final NhanVienValidator nhanVienValidator;
 
     @Override
-    public NhanVienCreateDTO taoTaiKhoan(NhanVienRequest request) {
+    public NhanVienCreateDTO taoTaiKhoan(NhanVienCreateRequest request) {
         nhanVienValidator.validateNhanVienRequest(request);
         nhanVienValidator.validateUniqueNhanVien(request);
 

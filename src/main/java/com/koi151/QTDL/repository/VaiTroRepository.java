@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository
 public interface VaiTroRepository extends JpaRepository<VaiTro, Long> {
-
+    Boolean existsByTenVT(String ten);
 }

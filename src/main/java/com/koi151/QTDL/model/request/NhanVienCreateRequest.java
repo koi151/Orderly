@@ -8,7 +8,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class NhanVienRequest {
+public class NhanVienCreateRequest {
 
     @Size(min = 5, max = 100, message = "Ho va ten phai trong khoang {min} den {max} ki tu")
     @NotBlank(message = "Thieu ho ten")
