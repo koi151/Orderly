@@ -5,4 +5,5 @@ import com.koi151.QTDL.model.request.DaiLyCreateRequest;
 
 public interface DaiLyService {
     DaiLyCreateDTO taoDaiLy(DaiLyCreateRequest request);
+    void xoaDaiLy(Long id);
 }

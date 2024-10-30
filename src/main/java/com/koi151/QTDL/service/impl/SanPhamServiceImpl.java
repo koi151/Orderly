@@ -12,6 +12,7 @@ import com.koi151.QTDL.repository.LoaiSanPhamRepository;
 import com.koi151.QTDL.repository.NhaCungCapRepository;
 import com.koi151.QTDL.repository.SanPhamRepository;
 import com.koi151.QTDL.service.SanPhamService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +26,7 @@ public class SanPhamServiceImpl implements SanPhamService {
     private final SanPhamMapper sanPhamMapper;
 
     @Override
+    @Transactional
     public SanPhamCreateDTO taoSanPham(SanPhamCreateRequest request) {
         if (sanPhamRepository.existsByTenSP(request.getTenSP()))
             throw new EntityAlreadyExistsException("Tên sản phẩm đã được sử dụng");
@@ -49,5 +51,14 @@ public class SanPhamServiceImpl implements SanPhamService {
             .tenLoaiSP(savedSPEntity.getLoaiSanPham().getTenLoai())
             .gia(savedSPEntity.getGia())
             .build();
+    }
+
+    @Override
+    public void xoaSanPham(Long id) {
+        SanPham sp = sanPhamRepository.findById(id)
+            .orElseThrow(() -> new EntityNotExistedException("Không tồn tại sản phẩm với id: " + id));
+
+        sp.setDaXoa(true);
+        sanPhamRepository.save(sp);
     }
 }

@@ -5,4 +5,6 @@ import com.koi151.QTDL.model.request.LoaiSanPhamCreateRequest;
 
 public interface LoaiSanPhamService {
     LoaiSanPhamCreateDTO taoLoaiSP(LoaiSanPhamCreateRequest request);
+
+    void xoaLoaiSP (Long id);
 }

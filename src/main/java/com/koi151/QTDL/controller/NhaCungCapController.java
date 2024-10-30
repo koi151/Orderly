@@ -8,10 +8,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -31,5 +28,16 @@ public class NhaCungCapController {
                 .desc("Tạo thành công nhà cung cấp " + request.getTenNCC())
                 .build()
             , HttpStatus.CREATED);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ResponseData> xoaNhaCungCap (@PathVariable(name = "id") Long id ) {
+        nhaCungCapService.xoaNhaCungCap(id);
+
+        return new ResponseEntity<>(
+            ResponseData.builder()
+                .desc("Xóa thành công nhà cung cấp với id: " + id)
+                .build()
+            , HttpStatus.OK);
     }
 }

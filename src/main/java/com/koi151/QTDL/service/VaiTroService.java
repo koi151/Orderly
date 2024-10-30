@@ -5,4 +5,5 @@ import com.koi151.QTDL.model.request.VaiTroCreateRequest;
 
 public interface VaiTroService {
     VaiTroCreateDTO taoVaiTro(VaiTroCreateRequest request);
+    void xoaVaiTroQuanTri(Long id);
 }

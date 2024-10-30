@@ -8,10 +8,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -21,15 +18,26 @@ public class LoaiSanPhamController {
     private final LoaiSanPhamService loaiSanPhamService;
 
     @PostMapping("/")
-    public ResponseEntity<ResponseData> taoTaiKhoan(
+    public ResponseEntity<ResponseData> taoLoaiSP(
         @RequestBody @NotNull @Valid LoaiSanPhamCreateRequest request
     ) {
         var accountCreated = loaiSanPhamService.taoLoaiSP(request);
         return new ResponseEntity<>(
             ResponseData.builder()
                 .data(accountCreated)
-                .desc("Tao thanh cong loai tai khoan: " + request.getTenLoai())
+                .desc("Tạo thành công loại sản phẩm: " + request.getTenLoai())
                 .build()
             , HttpStatus.CREATED);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ResponseData> xoaLoaiSP (@PathVariable(name = "id") Long id ) {
+        loaiSanPhamService.xoaLoaiSP(id);
+
+        return new ResponseEntity<>(
+            ResponseData.builder()
+                .desc("Xóa thành công loại sản phẩm với id: " + id)
+                .build()
+            , HttpStatus.OK);
     }
 }

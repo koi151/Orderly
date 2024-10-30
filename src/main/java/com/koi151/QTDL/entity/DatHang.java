@@ -1,6 +1,6 @@
 package com.koi151.QTDL.entity;
 
-import com.koi151.QTDL.enums.TrangThaiDatHang;
+import com.koi151.QTDL.enums.TrangThaiDatHangEnum;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -19,11 +19,11 @@ public class DatHang extends BaseEntity {
     private long maDH;
 
     @ManyToOne
-    @JoinColumn(name = "maDL", nullable = false)  // Khóa ngoại tham chiếu tới DaiLy
+    @JoinColumn(name = "maDL", nullable = false)
     private DaiLy daiLy;
 
     @ManyToOne
-    @JoinColumn(name = "maNV", nullable = false)  // Khóa ngoại tham chiếu tới NhanVien
+    @JoinColumn(name = "maNV", nullable = false)
     private NhanVien nhanVien;
 
     @OneToMany(mappedBy = "datHang", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -34,5 +34,5 @@ public class DatHang extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "trangThai", nullable = false)
-    private TrangThaiDatHang trangThai;
+    private TrangThaiDatHangEnum trangThai;
 }

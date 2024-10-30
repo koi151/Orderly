@@ -5,4 +5,5 @@ import com.koi151.QTDL.model.request.SanPhamCreateRequest;
 
 public interface SanPhamService {
     SanPhamCreateDTO taoSanPham(SanPhamCreateRequest request);
+    void xoaSanPham(Long id);
 }

@@ -32,7 +32,18 @@ public class NhanVienController {
                 .data(accountCreated)
                 .desc("Tạo thành công tài khoản nhân viên")
                 .build()
-            , HttpStatus.CREATED);
+            , HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ResponseData> xoaNhanVien (@PathVariable(name = "id") Long id ) {
+        nhanVienService.xoaNhanVien(id);
+
+        return new ResponseEntity<>(
+            ResponseData.builder()
+                .desc("Xóa thành công nhân viên với id: " + id)
+                .build()
+            , HttpStatus.OK);
     }
 }
 

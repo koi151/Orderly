@@ -5,4 +5,6 @@ import com.koi151.QTDL.model.request.NhaCungCapCreateRequest;
 
 public interface NhaCungCapService {
     NhaCungCapCreateDTO taoNhaCungCap(NhaCungCapCreateRequest request);
+
+    void xoaNhaCungCap(Long id);
 }

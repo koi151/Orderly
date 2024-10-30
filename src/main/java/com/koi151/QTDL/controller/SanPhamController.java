@@ -7,10 +7,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -30,5 +27,16 @@ public class SanPhamController {
                 .desc("Tạo sản phẩm thành công")
                 .build()
             , HttpStatus.CREATED);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ResponseData> xoaSanPham (@PathVariable(name = "id") Long id ) {
+        sanPhamService.xoaSanPham(id);
+
+        return new ResponseEntity<>(
+            ResponseData.builder()
+                .desc("Xóa thành công sản phẩm với id: " + id)
+                .build()
+            , HttpStatus.OK);
     }
 }

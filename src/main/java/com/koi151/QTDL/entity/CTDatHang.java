@@ -13,20 +13,20 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class CTDatHang extends BaseEntity {
+public class CTDatHang {
 
     @EmbeddedId
     private CTDatHangKey ctDatHangKey;
 
     @ManyToOne
-    @MapsId("maSP")  // Ánh xạ khóa chính maSP
+    @MapsId("maSP")
     @JoinColumn(name = "maSP", referencedColumnName = "maSP", nullable = false)
-    private SanPham sanPham;  // Khóa ngoại tới SanPham
+    private SanPham sanPham;
 
     @ManyToOne
-    @MapsId("maDH")  // Ánh xạ khóa chính maDH
+    @MapsId("maDH")
     @JoinColumn(name = "maDH", referencedColumnName = "maDH", nullable = false)
-    private DatHang datHang;  // Khóa ngoại tới DatHang
+    private DatHang datHang;
 
     @Column(name = "soLg", nullable = false)
     private int soLg;
@@ -34,6 +34,6 @@ public class CTDatHang extends BaseEntity {
     @Column(name = "ngayGiaoHang", columnDefinition = "TIMESTAMP")
     private LocalDateTime ngayGiaoHang;
 
-    @Column(name = "donGia", precision = 10)
-    private BigDecimal donGia;
+//    @Column(name = "donGia", precision = 10)
+//    private BigDecimal donGia;
 }

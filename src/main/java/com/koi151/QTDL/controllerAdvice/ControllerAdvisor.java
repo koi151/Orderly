@@ -1,9 +1,6 @@
 package com.koi151.QTDL.controllerAdvice;
 
-import com.koi151.QTDL.customExceptions.EntityAlreadyExistsException;
-import com.koi151.QTDL.customExceptions.EntityNotExistedException;
-import com.koi151.QTDL.customExceptions.PasswordMismatchException;
-import com.koi151.QTDL.customExceptions.InvalidRequestException;
+import com.koi151.QTDL.customExceptions.*;
 import com.koi151.QTDL.model.response.ErrorResponse;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
@@ -16,6 +13,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -32,7 +30,7 @@ public class ControllerAdvisor {
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
             .body(ErrorResponse.builder()
-                .error("Xac thuc yeu cau that bai")
+                .error("Yêu cầu không hợp lệ")
                 .details(errors)
                 .build());
     }
@@ -65,7 +63,7 @@ public class ControllerAdvisor {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
             .body(ErrorResponse.builder()
                 .error(ex.getMessage())
-                .details(Collections.singletonList("Yeu cau khong hop le"))
+                .details(Collections.singletonList("Yêu cầu không hợp lệ"))
                 .build());
     }
 
@@ -93,5 +91,18 @@ public class ControllerAdvisor {
                 .error("Thực thể không tồn tại")
                 .details(Collections.singletonList(ex.getMessage()))
                 .build());
+    }
+
+    @ExceptionHandler(InvalidEnumValueException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidEnumValueException(InvalidEnumValueException ex) {
+
+        List<String> details = new ArrayList<>();
+        details.add("Kiểm tra lại giá trị enum");
+
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setError(ex.getMessage());
+        errorResponse.setDetails(details);
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
 }
