@@ -4,8 +4,8 @@ import com.koi151.QTDL.customExceptions.EntityDeletionFailed;
 import com.koi151.QTDL.customExceptions.EntityNotExistedException;
 import com.koi151.QTDL.entity.Supplier;
 import com.koi151.QTDL.mapper.SupplierMapper;
-import com.koi151.QTDL.model.dto.SupplierCreateDTO;
-import com.koi151.QTDL.model.request.SupplierCreateRequest;
+import com.koi151.QTDL.model.dto.SupplierDTO;
+import com.koi151.QTDL.model.request.SupplierRequest;
 import com.koi151.QTDL.repository.SupplierRepository;
 import com.koi151.QTDL.service.SupplierService;
 import com.koi151.QTDL.validator.SupplierValidator;
@@ -23,7 +23,7 @@ public class SupplierServiceImpl implements SupplierService {
 
     @Override
     @Transactional
-    public SupplierCreateDTO createSupplier(SupplierCreateRequest request) {
+    public SupplierDTO createSupplier(SupplierRequest request) {
         supplierValidator.validateSupplier(request);
 
         Supplier ncc = Supplier.builder()
@@ -34,6 +34,16 @@ public class SupplierServiceImpl implements SupplierService {
 
         Supplier savedNCCEntity = supplierRepository.save(ncc);
         return supplierMapper.toSupplierCreateDTO(savedNCCEntity);
+    }
+
+    @Transactional
+    public SupplierDTO updateSupplier(Long supplierId, SupplierRequest supplierRequest) {
+        Supplier existingSupplier = supplierRepository.findById(supplierId)
+            .orElseThrow(() -> new EntityNotExistedException("Không tìm thấy nhà cung cấp với id: " + supplierId));
+
+        Supplier updatedSupplier = supplierMapper.updateSupplierFromRequest(supplierRequest, existingSupplier);
+        Supplier savedSupplier = supplierRepository.save(updatedSupplier);
+        return supplierMapper.toSupplierDTO(savedSupplier);
     }
 
     @Override

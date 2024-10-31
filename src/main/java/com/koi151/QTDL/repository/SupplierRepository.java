@@ -8,7 +8,9 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface SupplierRepository extends JpaRepository<Supplier, Long> {
-    Boolean existsBySupplierName(String ten);
+    Boolean existsBySupplierName(String name);
+
+    Supplier findBySupplierIdAndDeleted(Long id, Boolean deleted);
 
     @Query("SELECT COUNT(p) from product p WHERE p.supplier.supplierId = :supplierId")
     Long countProductsBySupplierId(@Param("supplierId") Long supplierId);

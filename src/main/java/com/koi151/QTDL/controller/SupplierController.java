@@ -1,6 +1,6 @@
 package com.koi151.QTDL.controller;
 
-import com.koi151.QTDL.model.request.SupplierCreateRequest;
+import com.koi151.QTDL.model.request.SupplierRequest;
 import com.koi151.QTDL.model.response.ResponseData;
 import com.koi151.QTDL.service.SupplierService;
 import jakarta.validation.Valid;
@@ -19,7 +19,7 @@ public class SupplierController {
 
     @PostMapping("/")
     public ResponseEntity<ResponseData> createSupplier(
-        @RequestBody @NotNull @Valid SupplierCreateRequest request
+        @RequestBody @NotNull @Valid SupplierRequest request
     ) {
         var accountCreated = supplierService.createSupplier(request);
         return new ResponseEntity<>(
@@ -28,6 +28,16 @@ public class SupplierController {
                 .desc("Tạo thành công nhà cung cấp " + request.getSupplierName())
                 .build()
             , HttpStatus.CREATED);
+    }
+
+    @PatchMapping("/{supplierId}")
+    public ResponseEntity<ResponseData> updateSupplier(@PathVariable Long supplierId,
+                                                   @Valid @RequestBody SupplierRequest supplierRequest) {
+        var updatedSupplier = supplierService.updateSupplier(supplierId, supplierRequest);
+        return ResponseEntity.ok(ResponseData.builder()
+            .data(updatedSupplier)
+            .desc("Cập nhật thành công thông tin nhà cung cấp " + updatedSupplier.getSupplierName())
+            .build());
     }
 
     @DeleteMapping("/{id}")

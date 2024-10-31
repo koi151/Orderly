@@ -12,4 +12,6 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
     List<Employee> getAllByDeleted(Boolean deleted);
 
     Boolean existsByEmailOrPhone(String email, String phone);
+
+
 }

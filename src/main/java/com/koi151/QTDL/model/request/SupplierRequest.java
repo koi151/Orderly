@@ -8,7 +8,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class SupplierCreateRequest {
+public class SupplierRequest {
 
     @Size(max = 100, message = "Tên nhà cung cấp không vượt quá {max} kí tự")
     private String supplierName;
