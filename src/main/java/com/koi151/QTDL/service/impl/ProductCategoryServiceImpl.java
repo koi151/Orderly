@@ -1,5 +1,6 @@
 package com.koi151.QTDL.service.impl;
 
+import com.koi151.QTDL.customExceptions.EntityDeletionFailed;
 import com.koi151.QTDL.customExceptions.EntityNotExistedException;
 import com.koi151.QTDL.entity.ProductCategory;
 import com.koi151.QTDL.mapper.ProductCategoryMapper;
@@ -24,23 +25,28 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
     @Transactional
     public ProductCategoryCreateDTO createCategory(ProductCategoryCreateRequest request) {
         productCategoryValidator.validateProductCategory(request);
-        ProductCategory loaiSP = ProductCategory.builder()
+        ProductCategory category = ProductCategory.builder()
             .categoryName(request.getCategoryName())
             .build();
 
-        ProductCategory loaiSPsaved = productCategoryRepository.save(loaiSP);
-        return productCategoryMapper.toCategoryDTO(loaiSPsaved);
+        ProductCategory categorySaved = productCategoryRepository.save(category);
+        return productCategoryMapper.toCategoryDTO(categorySaved);
     }
 
     @Override
     @Transactional
     public void deleteCategory (Long id) {
-        ProductCategory loaiSP = productCategoryRepository.findById(id)
+        ProductCategory existedCategory = productCategoryRepository.findById(id)
             .orElseThrow(() -> new EntityNotExistedException("Không tìm thấy loại SP với mã loại: " + id));
 
-//        var SPThuocLoai = categoryRepository.find
+        Long productsCnt = productCategoryRepository.countProductsByCategoryId(id);
 
-        loaiSP.setDeleted(true);
-        productCategoryRepository.save(loaiSP);
+        if (productsCnt == 0) {
+            existedCategory.setDeleted(true);
+            productCategoryRepository.save(existedCategory);
+        } else {
+            throw new EntityDeletionFailed("ID danh mục đã được sử dụng bởi " + productsCnt
+                + " sản phẩm. Sửa danh mục các sản phẩm trên trước khi xóa danh mục với id: " + id);
+        }
     }
 }

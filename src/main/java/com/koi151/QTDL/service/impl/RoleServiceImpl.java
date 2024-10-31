@@ -1,6 +1,7 @@
 package com.koi151.QTDL.service.impl;
 
 
+import com.koi151.QTDL.customExceptions.EntityDeletionFailed;
 import com.koi151.QTDL.customExceptions.EntityNotExistedException;
 import com.koi151.QTDL.entity.Role;
 import com.koi151.QTDL.mapper.RoleMapper;
@@ -38,10 +39,17 @@ public class RoleServiceImpl implements RoleService {
     @Override
     @Transactional
     public void deleteRole(Long id) {
-        Role vt = roleRepository.findById(id)
+        Role existedRole = roleRepository.findById(id)
             .orElseThrow(() -> new EntityNotExistedException("Vai trò quản trị không tồn tại với id: " + id));
 
-        vt.setDeleted(true);
-        roleRepository.save(vt);
+        Long employeesCnt = roleRepository.countEmployeesByRoleId(id);
+
+        if (employeesCnt == 0) {
+            existedRole.setDeleted(true);
+            roleRepository.save(existedRole);
+        } else {
+            throw new EntityDeletionFailed("ID vai trò quản trị đã được sử dụng bởi " + employeesCnt
+                + " nhân viên. Sửa vai trò quản trị các nhân viên trên trước khi xóa vai trò quản trị với id: " + id);
+        }
     }
 }

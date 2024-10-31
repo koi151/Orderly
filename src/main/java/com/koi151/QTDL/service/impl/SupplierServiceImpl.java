@@ -1,5 +1,6 @@
 package com.koi151.QTDL.service.impl;
 
+import com.koi151.QTDL.customExceptions.EntityDeletionFailed;
 import com.koi151.QTDL.customExceptions.EntityNotExistedException;
 import com.koi151.QTDL.entity.Supplier;
 import com.koi151.QTDL.mapper.SupplierMapper;
@@ -36,11 +37,19 @@ public class SupplierServiceImpl implements SupplierService {
     }
 
     @Override
+    @Transactional
     public void deleteSupplier(Long id) {
-        Supplier ncc = supplierRepository.findById(id)
+        Supplier existedSupplier = supplierRepository.findById(id)
             .orElseThrow(() -> new EntityNotExistedException("Không tìm thấy nhà cung cấp với id: " + id));
 
-        ncc.setDeleted(true);
-        supplierRepository.save(ncc);
+        Long productsCnt = supplierRepository.countProductsBySupplierId(id);
+
+        if (productsCnt == 0) {
+            existedSupplier.setDeleted(true);
+            supplierRepository.save(existedSupplier);
+        } else {
+            throw new EntityDeletionFailed("ID nhà cung cấp đã được sử dụng bởi " + productsCnt
+                + " sản phẩm. Sửa nhà cung cấp các sản phẩm trên trước khi xóa nhà cung cấp với id: " + id);
+        }
     }
 }

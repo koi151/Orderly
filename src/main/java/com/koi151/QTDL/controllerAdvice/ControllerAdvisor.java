@@ -105,4 +105,13 @@ public class ControllerAdvisor {
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
+
+    @ExceptionHandler(EntityDeletionFailed.class)
+    public ResponseEntity<ErrorResponse> handleEntityDeletionFailed(EntityDeletionFailed ex) {
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+            .body(ErrorResponse.builder()
+                .error("Không thể xóa thực thể")
+                .details(Collections.singletonList(ex.getMessage()))
+                .build());
+    }
 }
