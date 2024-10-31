@@ -21,14 +21,14 @@ public class BaseEntity implements Serializable {
     private static final long serialVersionUID = 4746498586807182115L;
 
     @CreatedDate
-    @Column(name = "ngayTao", columnDefinition = "TIMESTAMP(0)",
+    @Column(name = "createdAt", columnDefinition = "TIMESTAMP(0)",
         nullable = false, updatable = false)
-    private LocalDateTime ngayTao;
+    private LocalDateTime createdAt;
 
-    @Column(name = "ngaySua", columnDefinition = "TIMESTAMP(0)", insertable = false)
+    @Column(name = "updatedAt", columnDefinition = "TIMESTAMP(0)", insertable = false)
     @LastModifiedDate
-    private LocalDateTime ngaySua;
+    private LocalDateTime updatedAt;
 
     @Column(name = "deleted")
-    private boolean daXoa = false;
+    private boolean deleted = false;
 }
