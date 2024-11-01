@@ -1,6 +1,6 @@
 package com.koi151.QTDL.controller;
 
-import com.koi151.QTDL.model.request.RoleCreateRequest;
+import com.koi151.QTDL.model.request.RoleRequest;
 import com.koi151.QTDL.model.response.ResponseData;
 import com.koi151.QTDL.service.RoleService;
 import jakarta.validation.Valid;
@@ -11,14 +11,14 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/vai-tro")
+@RequestMapping("/roles")
 public class RoleController {
 
     private final RoleService roleService;
 
     @PostMapping("/")
     public ResponseEntity<ResponseData> createRole(
-        @RequestBody @Valid RoleCreateRequest request
+        @RequestBody @Valid RoleRequest request
     ) {
         var accountCreated = roleService.createRole(request);
         return new ResponseEntity<>(
@@ -27,6 +27,16 @@ public class RoleController {
                 .desc("Tạo thành công vai trò " + request.getRoleName())
                 .build()
             , HttpStatus.CREATED);
+    }
+
+    @PatchMapping("/{roleId}")
+    public ResponseEntity<ResponseData> updateRole(@PathVariable Long roleId,
+                                                   @Valid @RequestBody RoleRequest request) {
+        var updatedRole = roleService.updateRole(roleId, request);
+        return ResponseEntity.ok(ResponseData.builder()
+            .data(updatedRole)
+            .desc("Cập nhật thành công thông tin vai trò ' " + updatedRole.getRoleName() +" '")
+            .build());
     }
 
     @DeleteMapping("/{id}")

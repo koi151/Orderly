@@ -20,7 +20,4 @@ public class OrderDetailRequest {
     private Integer quantity;
 
     LocalDateTime deliveryDate;
-
-//    @DecimalMax(value = "1000000000", message = "Giá không vượt quá {value}")
-//    private BigDecimal donGia;
 }

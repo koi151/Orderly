@@ -20,7 +20,7 @@ public class Product extends BaseEntity {
     private long productId;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<OrderDetail> dsOrderDetail;
+    private List<OrderDetail> orderDetails;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "categoryId")

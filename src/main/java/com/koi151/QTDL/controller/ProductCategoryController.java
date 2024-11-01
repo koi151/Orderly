@@ -1,6 +1,7 @@
 package com.koi151.QTDL.controller;
 
-import com.koi151.QTDL.model.request.ProductCategoryCreateRequest;
+import com.koi151.QTDL.model.request.ProductCategoryRequest;
+import com.koi151.QTDL.model.request.SupplierRequest;
 import com.koi151.QTDL.model.response.ResponseData;
 import com.koi151.QTDL.service.ProductCategoryService;
 import jakarta.validation.Valid;
@@ -19,7 +20,7 @@ public class ProductCategoryController {
 
     @PostMapping("/")
     public ResponseEntity<ResponseData> createCategory(
-        @RequestBody @NotNull @Valid ProductCategoryCreateRequest request
+        @RequestBody @NotNull @Valid ProductCategoryRequest request
     ) {
         var accountCreated = productCategoryService.createCategory(request);
         return new ResponseEntity<>(
@@ -28,6 +29,16 @@ public class ProductCategoryController {
                 .desc("Tạo thành công loại sản phẩm: " + request.getCategoryName())
                 .build()
             , HttpStatus.CREATED);
+    }
+
+    @PatchMapping("/{categoryId}")
+    public ResponseEntity<ResponseData> updateProductCategory(@PathVariable Long categoryId,
+                                                       @Valid @RequestBody ProductCategoryRequest request) {
+        var updatedCategory = productCategoryService.updateCategory(categoryId, request);
+        return ResponseEntity.ok(ResponseData.builder()
+            .data(updatedCategory)
+            .desc("Cập nhật thành công thông tin danh mục sản phẩm " + updatedCategory.getCategoryName())
+            .build());
     }
 
     @DeleteMapping("/{id}")

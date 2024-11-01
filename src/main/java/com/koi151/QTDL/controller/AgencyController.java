@@ -1,6 +1,7 @@
 package com.koi151.QTDL.controller;
 
-import com.koi151.QTDL.model.request.AgencyCreateRequest;
+import com.koi151.QTDL.model.request.AgencyRequest;
+import com.koi151.QTDL.model.request.ProductCategoryRequest;
 import com.koi151.QTDL.model.response.ResponseData;
 import com.koi151.QTDL.service.AgencyService;
 import jakarta.validation.Valid;
@@ -19,7 +20,7 @@ public class AgencyController {
 
     @PostMapping("/")
     public ResponseEntity<ResponseData> createAgency(
-        @RequestBody @NotNull @Valid AgencyCreateRequest request
+        @RequestBody @NotNull @Valid AgencyRequest request
     ) {
         var accountCreated = agencyService.createAgency(request);
         return new ResponseEntity<>(
@@ -28,6 +29,16 @@ public class AgencyController {
                 .desc("Tạo thành công đại lý " + request.getAgencyName())
                 .build()
             , HttpStatus.CREATED);
+    }
+
+    @PatchMapping("/{agencyId}")
+    public ResponseEntity<ResponseData> updateAgency(@PathVariable Long agencyId,
+                                                     @Valid @RequestBody AgencyRequest request) {
+        var updatedCategory = agencyService.updateAgency(agencyId, request);
+        return ResponseEntity.ok(ResponseData.builder()
+            .data(updatedCategory)
+            .desc("Cập nhật thành công thông tin nhà cung cấp ' " + updatedCategory.getAgencyId() + " '")
+            .build());
     }
 
     @DeleteMapping("/{id}")

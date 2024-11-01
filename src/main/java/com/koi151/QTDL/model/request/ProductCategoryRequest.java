@@ -8,8 +8,11 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ProductCategoryCreateRequest {
+public class ProductCategoryRequest {
 
     @Size(max = 100, message = "Tên loại sản phẩm không vượt quá {max} kí tự")
     private String categoryName;
+
+    @Size(max = 65535, message = "Mô tả danh mục không vượt quá {max} kí tự")
+    private String description;
 }

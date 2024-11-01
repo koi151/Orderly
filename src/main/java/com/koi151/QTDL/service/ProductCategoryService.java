@@ -1,10 +1,10 @@
 package com.koi151.QTDL.service;
 
-import com.koi151.QTDL.model.dto.ProductCategoryCreateDTO;
-import com.koi151.QTDL.model.request.ProductCategoryCreateRequest;
+import com.koi151.QTDL.model.dto.ProductCategoryDTO;
+import com.koi151.QTDL.model.request.ProductCategoryRequest;
 
 public interface ProductCategoryService {
-    ProductCategoryCreateDTO createCategory(ProductCategoryCreateRequest request);
-
+    ProductCategoryDTO createCategory(ProductCategoryRequest request);
+    ProductCategoryDTO updateCategory(Long id, ProductCategoryRequest request);
     void deleteCategory (Long id);
 }

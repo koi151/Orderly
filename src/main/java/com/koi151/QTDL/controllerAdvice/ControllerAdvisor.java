@@ -21,17 +21,30 @@ import java.util.stream.Collectors;
 @RestControllerAdvice
 @Slf4j
 public class ControllerAdvisor {
+//    @ExceptionHandler(MethodArgumentNotValidException.class)
+//    public ResponseEntity<Object> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
+//        List<String> errors = ex.getBindingResult().getFieldErrors()
+//            .stream()
+//            .map(FieldError::getDefaultMessage)
+//            .collect(Collectors.toList());
+//
+//        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+//            .body(ErrorResponse.builder()
+//                .error("Yêu cầu không hợp lệ")
+//                .details(errors)
+//                .build());
+//    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Object> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
-        List<String> errors = ex.getBindingResult().getFieldErrors()
-            .stream()
-            .map(FieldError::getDefaultMessage)
+    public ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
+        List<String> errorDetails = ex.getBindingResult().getFieldErrors().stream()
+            .map(error -> error.getField() + ": " + error.getDefaultMessage())
             .collect(Collectors.toList());
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
             .body(ErrorResponse.builder()
-                .error("Yêu cầu không hợp lệ")
-                .details(errors)
+                .error("Yêu cầu không hợp lệ, kiểm tra lại dữ liệu đầu vào")
+                .details(errorDetails)
                 .build());
     }
 
@@ -80,7 +93,7 @@ public class ControllerAdvisor {
     public ResponseEntity<ErrorResponse> handleHttpMessageNotReadableException(HttpMessageNotReadableException ex) {
         return ResponseEntity.status(HttpStatus.CONFLICT)
             .body(ErrorResponse.builder()
-                .error("Request body rỗng, yêu cầu không hợp lệ")
+                .error("Yêu cầu không hợp lệ, kiểm tra lại Request Body")
                 .details(Collections.singletonList(ex.getMessage()))
                 .build());
     }

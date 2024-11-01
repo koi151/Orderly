@@ -1,9 +1,14 @@
 package com.koi151.QTDL.service;
 
-import com.koi151.QTDL.model.dto.AgencyCreateDTO;
-import com.koi151.QTDL.model.request.AgencyCreateRequest;
+import com.koi151.QTDL.model.dto.AgencyDTO;
+import com.koi151.QTDL.model.dto.ProductCategoryDTO;
+import com.koi151.QTDL.model.request.AgencyRequest;
+import com.koi151.QTDL.model.request.ProductCategoryRequest;
 
 public interface AgencyService {
-    AgencyCreateDTO createAgency(AgencyCreateRequest request);
+    AgencyDTO createAgency(AgencyRequest request);
+
+    AgencyDTO updateAgency(Long id, AgencyRequest request);
+
     void deleteAgency(Long id);
 }

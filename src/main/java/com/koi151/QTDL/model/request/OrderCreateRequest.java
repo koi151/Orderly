@@ -23,6 +23,6 @@ public class OrderCreateRequest {
     @Valid
     private List<OrderDetailRequest> orderDetails;
 
-    @Size(max = 65535, message = "Thông tin gi chú không vượt quá {max} kí tự")
+    @Size(max = 65535, message = "Thông tin ghi chú không vượt quá {max} kí tự")
     private String notes;
 }

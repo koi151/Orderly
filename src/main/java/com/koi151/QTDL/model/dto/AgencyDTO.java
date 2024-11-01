@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class AgencyCreateDTO {
+public class AgencyDTO {
     private long agencyId;
     private String agencyName;
     private String address;

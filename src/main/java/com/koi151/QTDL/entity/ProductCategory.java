@@ -17,6 +17,9 @@ public class ProductCategory extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long categoryId;
 
+    @Column(name = "description", columnDefinition = "TEXT")
+    private String description;
+
     @OneToMany(mappedBy = "productCategory",
         cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
     private List<Product> products;

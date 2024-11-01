@@ -8,7 +8,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class RoleCreateRequest {
+public class RoleRequest {
 
     @Size(min = 3, max = 100, message = "Ten vai tro phai trong khoang {min} den {max} ki tu")
     private String roleName;
