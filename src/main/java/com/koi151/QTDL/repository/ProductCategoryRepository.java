@@ -6,10 +6,13 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface ProductCategoryRepository extends JpaRepository<ProductCategory, Long> {
     Boolean existsByCategoryName(String name);
-
+    Boolean existsByCategoryNameAndCategoryIdNot(String name, Long id);
     @Query("SELECT COUNT(p) FROM product p WHERE p.productCategory.categoryId = :categoryId")
     Long countProductsByCategoryId (@Param("categoryId") Long categoryId);
+    Optional<ProductCategory> findByCategoryIdAndDeleted(Long id, Boolean deleted);
 }

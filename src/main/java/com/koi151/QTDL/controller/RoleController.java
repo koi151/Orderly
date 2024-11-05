@@ -1,6 +1,7 @@
 package com.koi151.QTDL.controller;
 
-import com.koi151.QTDL.model.request.RoleRequest;
+import com.koi151.QTDL.model.request.create.RoleCreateRequest;
+import com.koi151.QTDL.model.request.update.RoleUpdateRequest;
 import com.koi151.QTDL.model.response.ResponseData;
 import com.koi151.QTDL.service.RoleService;
 import jakarta.validation.Valid;
@@ -18,7 +19,7 @@ public class RoleController {
 
     @PostMapping("/")
     public ResponseEntity<ResponseData> createRole(
-        @RequestBody @Valid RoleRequest request
+        @RequestBody @Valid RoleCreateRequest request
     ) {
         var accountCreated = roleService.createRole(request);
         return new ResponseEntity<>(
@@ -31,7 +32,7 @@ public class RoleController {
 
     @PatchMapping("/{roleId}")
     public ResponseEntity<ResponseData> updateRole(@PathVariable Long roleId,
-                                                   @Valid @RequestBody RoleRequest request) {
+                                                   @Valid @RequestBody RoleUpdateRequest request) {
         var updatedRole = roleService.updateRole(roleId, request);
         return ResponseEntity.ok(ResponseData.builder()
             .data(updatedRole)

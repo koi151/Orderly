@@ -21,32 +21,20 @@ import java.util.stream.Collectors;
 @RestControllerAdvice
 @Slf4j
 public class ControllerAdvisor {
-//    @ExceptionHandler(MethodArgumentNotValidException.class)
-//    public ResponseEntity<Object> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
-//        List<String> errors = ex.getBindingResult().getFieldErrors()
-//            .stream()
-//            .map(FieldError::getDefaultMessage)
-//            .collect(Collectors.toList());
-//
-//        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-//            .body(ErrorResponse.builder()
-//                .error("Yêu cầu không hợp lệ")
-//                .details(errors)
-//                .build());
-//    }
-
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
-        List<String> errorDetails = ex.getBindingResult().getFieldErrors().stream()
-            .map(error -> error.getField() + ": " + error.getDefaultMessage())
+    public ResponseEntity<Object> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
+        List<String> errors = ex.getBindingResult().getFieldErrors()
+            .stream()
+            .map(FieldError::getDefaultMessage)
             .collect(Collectors.toList());
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
             .body(ErrorResponse.builder()
-                .error("Yêu cầu không hợp lệ, kiểm tra lại dữ liệu đầu vào")
-                .details(errorDetails)
+                .error("Yêu cầu không hợp lệ")
+                .details(errors)
                 .build());
     }
+
 
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<Object> handleConstraintViolationException(ConstraintViolationException ex) {

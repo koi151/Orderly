@@ -19,7 +19,7 @@ public class Role extends BaseEntity {
     private long roleId;
 
     @OneToMany(mappedBy = "role", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Employee> dsEmployee;
+    private List<Employee> employees;
 
     @Column(name = "roleName", nullable = false, length = 50)
     private String roleName;

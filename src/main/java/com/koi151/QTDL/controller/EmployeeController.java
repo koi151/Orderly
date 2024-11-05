@@ -1,6 +1,8 @@
 package com.koi151.QTDL.controller;
 
-import com.koi151.QTDL.model.request.EmployeeCreateRequest;
+import com.koi151.QTDL.model.request.create.EmployeeCreateRequest;
+import com.koi151.QTDL.model.request.update.AgencyUpdateRequest;
+import com.koi151.QTDL.model.request.update.EmployeeUpdateRequest;
 import com.koi151.QTDL.model.response.ResponseData;
 import com.koi151.QTDL.service.EmployeeService;
 import jakarta.validation.Valid;
@@ -24,7 +26,7 @@ public class EmployeeController {
 
     @PostMapping("/")
     public ResponseEntity<ResponseData> createAccount(
-        @RequestBody @NotNull @Valid EmployeeCreateRequest request
+        @RequestBody @Valid EmployeeCreateRequest request
     ) {
         var accountCreated = employeeService.createEmployee(request);
         return new ResponseEntity<>(
@@ -35,8 +37,18 @@ public class EmployeeController {
             , HttpStatus.OK);
     }
 
+    @PatchMapping("/{employeeId}")
+    public ResponseEntity<ResponseData> updateEmployee(@PathVariable Long employeeId,
+                                                     @Valid @RequestBody EmployeeUpdateRequest request) {
+        var updatedCategory = employeeService.updateEmployee(employeeId, request);
+        return ResponseEntity.ok(ResponseData.builder()
+            .data(updatedCategory)
+            .desc("Cập nhật thành công thông tin nhân viên với id: " + updatedCategory.getEmployeeId())
+            .build());
+    }
+
     @DeleteMapping("/{id}")
-    public ResponseEntity<ResponseData> deleteNhanVien (@PathVariable(name = "id") Long id ) {
+    public ResponseEntity<ResponseData> deleteEmployee (@PathVariable(name = "id") Long id ) {
         employeeService.deleteEmployee(id);
 
         return new ResponseEntity<>(

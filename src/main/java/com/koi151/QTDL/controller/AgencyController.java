@@ -1,7 +1,7 @@
 package com.koi151.QTDL.controller;
 
-import com.koi151.QTDL.model.request.AgencyRequest;
-import com.koi151.QTDL.model.request.ProductCategoryRequest;
+import com.koi151.QTDL.model.request.create.AgencyCreateRequest;
+import com.koi151.QTDL.model.request.update.AgencyUpdateRequest;
 import com.koi151.QTDL.model.response.ResponseData;
 import com.koi151.QTDL.service.AgencyService;
 import jakarta.validation.Valid;
@@ -20,7 +20,7 @@ public class AgencyController {
 
     @PostMapping("/")
     public ResponseEntity<ResponseData> createAgency(
-        @RequestBody @NotNull @Valid AgencyRequest request
+        @RequestBody @Valid AgencyCreateRequest request
     ) {
         var accountCreated = agencyService.createAgency(request);
         return new ResponseEntity<>(
@@ -33,7 +33,7 @@ public class AgencyController {
 
     @PatchMapping("/{agencyId}")
     public ResponseEntity<ResponseData> updateAgency(@PathVariable Long agencyId,
-                                                     @Valid @RequestBody AgencyRequest request) {
+                                                     @Valid @RequestBody AgencyUpdateRequest request) {
         var updatedCategory = agencyService.updateAgency(agencyId, request);
         return ResponseEntity.ok(ResponseData.builder()
             .data(updatedCategory)

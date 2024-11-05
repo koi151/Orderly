@@ -2,28 +2,30 @@ package com.koi151.QTDL.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 @Entity(name = "agency")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
 @Builder
 public class Agency extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long agencyId;
+    long agencyId;
 
     @Column(name = "agencyName", nullable = false, length = 100)
-    private String agencyName;
+    String agencyName;
 
     @Column(name = "address", length = 100)
-    private String address;
+    String address;
 
     @Column(name = "phone", length = 20)
-    private String phone;
+    String phone;
 
     @Column(name = "repInfo", length = 100)
-    private String repInfo;
+    String repInfo;
 }

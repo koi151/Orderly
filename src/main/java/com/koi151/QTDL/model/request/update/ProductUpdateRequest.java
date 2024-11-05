@@ -1,7 +1,8 @@
-package com.koi151.QTDL.model.request;
+package com.koi151.QTDL.model.request.update;
 
-
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.DecimalMax;
+import jakarta.validation.constraints.PositiveOrZero;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 
 import java.math.BigDecimal;
@@ -11,18 +12,14 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ProductCreateRequest {
-
-    @NotNull(message = "Sản phẩm cần có mã loại")
+public class ProductUpdateRequest {
     private Long categoryId;
-
-    @NotNull(message = "Sản phẩm cần có mã nhà cung cấp")
     private Long supplierId;
 
     @Size(max = 100, message = "Tên sản phẩm không quá {max} kí tự")
     private String productName;
 
-    @PositiveOrZero(message = "Giá không được âm")
+    @PositiveOrZero(message = "Giá không hợp lệ")
     @DecimalMax(value = "1000000000", message = "Giá không vượt quá {value}")
     private BigDecimal price;
 }

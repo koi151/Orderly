@@ -26,3 +26,4 @@ spring:
         hibernate:
           SQL: debug
           type: trace
+      org.springframework.web: DEBUG

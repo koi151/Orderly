@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class EmployeeCreateDTO {
+public class EmployeeDTO {
     private long employeeId;
     private String fullName;
     private String email;

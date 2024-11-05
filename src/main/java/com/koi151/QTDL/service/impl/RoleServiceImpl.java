@@ -3,13 +3,11 @@ package com.koi151.QTDL.service.impl;
 
 import com.koi151.QTDL.customExceptions.EntityDeletionFailed;
 import com.koi151.QTDL.customExceptions.EntityNotExistedException;
-import com.koi151.QTDL.entity.ProductCategory;
 import com.koi151.QTDL.entity.Role;
 import com.koi151.QTDL.mapper.RoleMapper;
-import com.koi151.QTDL.model.dto.ProductCategoryDTO;
 import com.koi151.QTDL.model.dto.RoleDTO;
-import com.koi151.QTDL.model.request.ProductCategoryRequest;
-import com.koi151.QTDL.model.request.RoleRequest;
+import com.koi151.QTDL.model.request.create.RoleCreateRequest;
+import com.koi151.QTDL.model.request.update.RoleUpdateRequest;
 import com.koi151.QTDL.repository.RoleRepository;
 import com.koi151.QTDL.service.RoleService;
 import com.koi151.QTDL.validator.RoleValidator;
@@ -27,8 +25,8 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     @Transactional
-    public RoleDTO createRole(RoleRequest request) {
-        roleValidator.validateRole(request);
+    public RoleDTO createRole(RoleCreateRequest request) {
+        roleValidator.validateRoleName(request.getRoleName());
 
         Role role = Role.builder()
             .roleName(request.getRoleName())
@@ -41,8 +39,8 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     @Transactional
-    public RoleDTO updateRole(Long roleId, RoleRequest request) {
-        roleValidator.validateRole(request);
+    public RoleDTO updateRole(Long roleId, RoleUpdateRequest request) {
+        roleValidator.validateUpdateRoleName(request.getRoleName(), roleId);
 
         Role existingRole = roleRepository.findById(roleId)
             .orElseThrow(() -> new EntityNotExistedException("Không tồn tại vai trò quản trị với id: " + roleId));

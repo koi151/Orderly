@@ -19,7 +19,7 @@ public class OrderController {
 
     @PostMapping("/")
     public ResponseEntity<ResponseData> createOrder(
-        @RequestBody @NotNull @Valid OrderCreateRequest request
+        @RequestBody @Valid OrderCreateRequest request
     ) {
         var accountCreated = orderService.createOrder(request);
         return new ResponseEntity<>(
@@ -31,7 +31,7 @@ public class OrderController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<ResponseData> deleteOrder(@PathVariable(name = "id") Long id ) {
+    public ResponseEntity<ResponseData> deleteOrder (@PathVariable(name = "id") Long id ) {
         orderService.deleteOrder(id);
 
         return new ResponseEntity<>(

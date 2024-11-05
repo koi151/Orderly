@@ -1,6 +1,5 @@
-package com.koi151.QTDL.model.request;
+package com.koi151.QTDL.model.request.update;
 
-import jakarta.persistence.Column;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.*;
@@ -10,7 +9,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class AgencyRequest {
+public class AgencyUpdateRequest {
 
     @Size(max = 100, message = "Tên đại lý không vượt quá {max} kí tự")
     private String agencyName;
@@ -22,7 +21,6 @@ public class AgencyRequest {
     @Pattern(regexp = "^[0-9]+$", message = "Số điện thoại không hợp lệ")
     private String phone;
 
-    @Column(name = "repInfo", length = 100)
     @Size(max = 100, message = "Thông tin người đại diện không vượt quá {max} kí tự")
     private String repInfo;
 }

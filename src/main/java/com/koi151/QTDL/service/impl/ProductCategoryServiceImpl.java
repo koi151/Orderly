@@ -5,7 +5,8 @@ import com.koi151.QTDL.customExceptions.EntityNotExistedException;
 import com.koi151.QTDL.entity.ProductCategory;
 import com.koi151.QTDL.mapper.ProductCategoryMapper;
 import com.koi151.QTDL.model.dto.ProductCategoryDTO;
-import com.koi151.QTDL.model.request.ProductCategoryRequest;
+import com.koi151.QTDL.model.request.create.ProductCategoryCreateRequest;
+import com.koi151.QTDL.model.request.update.ProductCategoryUpdateRequest;
 import com.koi151.QTDL.repository.ProductCategoryRepository;
 import com.koi151.QTDL.service.ProductCategoryService;
 import com.koi151.QTDL.validator.ProductCategoryValidator;
@@ -23,8 +24,9 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
 
     @Override
     @Transactional
-    public ProductCategoryDTO createCategory(ProductCategoryRequest request) {
-        productCategoryValidator.validateProductCategory(request);
+    public ProductCategoryDTO createCategory(ProductCategoryCreateRequest request) {
+        productCategoryValidator.validateCategoryName(request.getCategoryName());
+
         ProductCategory category = ProductCategory.builder()
             .categoryName(request.getCategoryName())
             .build();
@@ -35,10 +37,10 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
 
     @Override
     @Transactional
-    public ProductCategoryDTO updateCategory(Long categoryId, ProductCategoryRequest request) {
-        productCategoryValidator.validateProductCategory(request);
+    public ProductCategoryDTO updateCategory(Long categoryId, ProductCategoryUpdateRequest request) {
+        productCategoryValidator.validateUpdateCategoryName(request.getCategoryName(), categoryId);
 
-        ProductCategory existingCategory = productCategoryRepository.findById(categoryId)
+        ProductCategory existingCategory = productCategoryRepository.findByCategoryIdAndDeleted(categoryId, false)
             .orElseThrow(() -> new EntityNotExistedException("Không tồn tại danh mục với id: " + categoryId));
 
         ProductCategory updatedCategory =  productCategoryMapper.updateCategoryFromRequest(request, existingCategory);

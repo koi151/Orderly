@@ -1,7 +1,7 @@
 package com.koi151.QTDL.controller;
 
-import com.koi151.QTDL.model.request.ProductCategoryRequest;
-import com.koi151.QTDL.model.request.SupplierRequest;
+import com.koi151.QTDL.model.request.create.ProductCategoryCreateRequest;
+import com.koi151.QTDL.model.request.update.ProductCategoryUpdateRequest;
 import com.koi151.QTDL.model.response.ResponseData;
 import com.koi151.QTDL.service.ProductCategoryService;
 import jakarta.validation.Valid;
@@ -20,7 +20,7 @@ public class ProductCategoryController {
 
     @PostMapping("/")
     public ResponseEntity<ResponseData> createCategory(
-        @RequestBody @NotNull @Valid ProductCategoryRequest request
+        @RequestBody @Valid ProductCategoryCreateRequest request
     ) {
         var accountCreated = productCategoryService.createCategory(request);
         return new ResponseEntity<>(
@@ -33,7 +33,7 @@ public class ProductCategoryController {
 
     @PatchMapping("/{categoryId}")
     public ResponseEntity<ResponseData> updateProductCategory(@PathVariable Long categoryId,
-                                                       @Valid @RequestBody ProductCategoryRequest request) {
+                                          @Valid @RequestBody ProductCategoryUpdateRequest request) {
         var updatedCategory = productCategoryService.updateCategory(categoryId, request);
         return ResponseEntity.ok(ResponseData.builder()
             .data(updatedCategory)

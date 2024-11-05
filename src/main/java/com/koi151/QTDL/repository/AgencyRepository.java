@@ -6,5 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface AgencyRepository extends JpaRepository<Agency, Long> {
-    Boolean existsByagencyName(String name);
+    Boolean existsByAgencyName(String name);
+    Boolean existsByAgencyNameAndAgencyIdNot(String name, Long id);
 }

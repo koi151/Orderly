@@ -19,7 +19,7 @@ public class SupplierController {
 
     @PostMapping("/")
     public ResponseEntity<ResponseData> createSupplier(
-        @RequestBody @NotNull @Valid SupplierRequest request
+        @RequestBody @Valid SupplierRequest request
     ) {
         var accountCreated = supplierService.createSupplier(request);
         return new ResponseEntity<>(

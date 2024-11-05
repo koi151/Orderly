@@ -2,12 +2,10 @@ package com.koi151.QTDL.service.impl;
 
 import com.koi151.QTDL.customExceptions.EntityNotExistedException;
 import com.koi151.QTDL.entity.Agency;
-import com.koi151.QTDL.entity.ProductCategory;
 import com.koi151.QTDL.mapper.AgencyMapper;
 import com.koi151.QTDL.model.dto.AgencyDTO;
-import com.koi151.QTDL.model.dto.ProductCategoryDTO;
-import com.koi151.QTDL.model.request.AgencyRequest;
-import com.koi151.QTDL.model.request.ProductCategoryRequest;
+import com.koi151.QTDL.model.request.create.AgencyCreateRequest;
+import com.koi151.QTDL.model.request.update.AgencyUpdateRequest;
 import com.koi151.QTDL.repository.AgencyRepository;
 import com.koi151.QTDL.service.AgencyService;
 import com.koi151.QTDL.validator.AgencyValidator;
@@ -25,8 +23,8 @@ public class AgencyServiceImpl implements AgencyService {
 
     @Override
     @Transactional
-    public AgencyDTO createAgency(AgencyRequest request) {
-        agencyValidator.validateAgency(request);
+    public AgencyDTO createAgency(AgencyCreateRequest request) {
+        agencyValidator.validateAgencyName(request.getAgencyName());
 
         Agency agency = Agency.builder()
             .agencyName(request.getAgencyName())
@@ -41,8 +39,8 @@ public class AgencyServiceImpl implements AgencyService {
 
     @Override
     @Transactional
-    public AgencyDTO updateAgency(Long agencyId, AgencyRequest request) {
-        agencyValidator.validateAgency(request);
+    public AgencyDTO updateAgency(Long agencyId, AgencyUpdateRequest request) {
+        agencyValidator.validateUpdateAgencyName(request.getAgencyName(), agencyId);
 
         Agency existingAgency = agencyRepository.findById(agencyId)
             .orElseThrow(() -> new EntityNotExistedException("Không tồn tại đại lý với id: " + agencyId));
@@ -55,10 +53,10 @@ public class AgencyServiceImpl implements AgencyService {
 
     @Override
     public void deleteAgency(Long id) {
-        Agency dl = agencyRepository.findById(id)
+        Agency existingAgency = agencyRepository.findById(id)
             .orElseThrow(() -> new EntityNotExistedException("Không tìm thấy đại lý với id: " + id));
 
-        dl.setDeleted(true);
-        agencyRepository.save(dl);
+        existingAgency.setDeleted(true);
+        agencyRepository.save(existingAgency);
     }
 }
