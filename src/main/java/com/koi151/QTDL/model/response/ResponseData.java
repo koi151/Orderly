@@ -1,13 +1,15 @@
 package com.koi151.QTDL.model.response;
 
+import com.koi151.QTDL.model.dto.AbstractDTO;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 @Getter
 @Setter
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ResponseData {
+@SuperBuilder
+public class ResponseData extends AbstractDTO<Object> {
 
 //    private short status = 200;
     private Object data;

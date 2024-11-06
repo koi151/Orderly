@@ -45,7 +45,7 @@ public class ControllerAdvisor {
 
         return ResponseEntity.badRequest()
             .body(ErrorResponse.builder()
-                .error("Request khong hop le")
+                .error("Yêu cầu không hợp lệ")
                 .details(constraintViolations)
                 .build());
     }
@@ -55,7 +55,7 @@ public class ControllerAdvisor {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
             .body(ErrorResponse.builder()
                 .error(ex.getMessage())
-                .details(Collections.singletonList("Mat khau xac nhan khong hop le, hay nhap lai"))
+                .details(Collections.singletonList("Mật khẩu xác nhận lại không hợp lệ, hãy kiểm tra lại"))
                 .build());
     }
 
@@ -72,7 +72,7 @@ public class ControllerAdvisor {
     public ResponseEntity<ErrorResponse> handleEntityAlreadyExistsException(EntityAlreadyExistsException ex) {
         return ResponseEntity.status(HttpStatus.CONFLICT)
             .body(ErrorResponse.builder()
-                .error("Thuc the da ton tai, du lieu khong the trung lap")
+                .error("Thực thể đã tồn tại, dữ liệu không thể trùng lập")
                 .details(Collections.singletonList(ex.getMessage()))
                 .build());
     }

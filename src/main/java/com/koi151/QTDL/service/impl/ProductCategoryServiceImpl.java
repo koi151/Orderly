@@ -6,12 +6,15 @@ import com.koi151.QTDL.entity.ProductCategory;
 import com.koi151.QTDL.mapper.ProductCategoryMapper;
 import com.koi151.QTDL.model.dto.ProductCategoryDTO;
 import com.koi151.QTDL.model.request.create.ProductCategoryCreateRequest;
+import com.koi151.QTDL.model.request.search.ProductCategorySearchRequest;
 import com.koi151.QTDL.model.request.update.ProductCategoryUpdateRequest;
 import com.koi151.QTDL.repository.ProductCategoryRepository;
 import com.koi151.QTDL.service.ProductCategoryService;
 import com.koi151.QTDL.validator.ProductCategoryValidator;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -21,6 +24,18 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
     private final ProductCategoryRepository productCategoryRepository;
     private final ProductCategoryMapper productCategoryMapper;
     private final ProductCategoryValidator productCategoryValidator;
+
+//    @Override
+//    public Page<ProductCategoryDTO> getCategories(PropertyCategorySearchRequest request, Pageable pageable) {
+//        Page<ProductCategory> categories = productCategoryRepository.findByCategoryNameAndDeleted(request.getCategoryName(), false, pageable);
+//        return productCategoryMapper.toProductCategoryPage(categories);
+//    }
+
+    @Override
+    public Page<ProductCategoryDTO> getCategories(ProductCategorySearchRequest request, Pageable pageable) {
+        return productCategoryRepository.searchCategories(request, pageable)
+            .map(productCategoryMapper::toCategoryDTO);
+    }
 
     @Override
     @Transactional
@@ -46,7 +61,7 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
         ProductCategory updatedCategory =  productCategoryMapper.updateCategoryFromRequest(request, existingCategory);
         ProductCategory savedCategory = productCategoryRepository.save(updatedCategory);
 
-        return productCategoryMapper.toProductCategoryDTO(savedCategory);
+        return productCategoryMapper.toCategoryDTO(savedCategory);
     }
 
 
