@@ -1,5 +1,6 @@
-package com.koi151.QTDL.model.request;
+package com.koi151.QTDL.model.request.create;
 
+import com.koi151.QTDL.model.request.OrderDetailRequest;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -17,7 +18,7 @@ public class OrderCreateRequest {
     @NotNull(message = "Yêu cầu đặt hàng cần có mã đại lý")
     private Long agencyId;
 
-    @NotNull(message = "Yêu cầu đặt hàngcần có mã mã nhân viên")
+    @NotNull(message = "Yêu cầu đặt hàng cần có mã mã nhân viên")
     private Long employeeId;
 
     @Valid

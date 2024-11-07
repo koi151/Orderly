@@ -8,7 +8,7 @@ import com.koi151.QTDL.entity.Employee;
 import com.koi151.QTDL.entity.keys.OrderDetailKey;
 import com.koi151.QTDL.enums.OrderStatusEnum;
 import com.koi151.QTDL.model.dto.OrderCreateDTO;
-import com.koi151.QTDL.model.request.OrderCreateRequest;
+import com.koi151.QTDL.model.request.create.OrderCreateRequest;
 import com.koi151.QTDL.repository.AgencyRepository;
 import com.koi151.QTDL.repository.OrderRepository;
 import com.koi151.QTDL.repository.EmployeeRepository;

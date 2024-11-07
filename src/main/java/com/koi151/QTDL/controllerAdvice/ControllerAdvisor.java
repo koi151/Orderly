@@ -5,6 +5,7 @@ import com.koi151.QTDL.model.response.ErrorResponse;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -36,17 +38,13 @@ public class ControllerAdvisor {
     }
 
 
-    @ExceptionHandler(ConstraintViolationException.class)
-    public ResponseEntity<Object> handleConstraintViolationException(ConstraintViolationException ex) {
-        List<String> constraintViolations = ex.getConstraintViolations()
-            .stream()
-            .map(ConstraintViolation::getMessage)
-            .collect(Collectors.toList());
-
-        return ResponseEntity.badRequest()
+    @ExceptionHandler(SQLException.class)
+    public ResponseEntity<ErrorResponse> handleSQLException(SQLException ex) {
+        String errorMessage = ex.getMessage();
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
             .body(ErrorResponse.builder()
                 .error("Yêu cầu không hợp lệ")
-                .details(constraintViolations)
+                .details(Collections.singletonList(errorMessage))
                 .build());
     }
 
@@ -85,6 +83,16 @@ public class ControllerAdvisor {
                 .details(Collections.singletonList(ex.getMessage()))
                 .build());
     }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<ErrorResponse> handleDataIntegrityViolationException(DataIntegrityViolationException ex) {
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+            .body(ErrorResponse.builder()
+                .error("Data Integrity Violation")
+                .details(Collections.singletonList(ex.getMostSpecificCause().getMessage()))
+                .build());
+    }
+
     @ExceptionHandler(EntityNotExistedException.class)
     public ResponseEntity<ErrorResponse> handleEntityNotExistedException(EntityNotExistedException ex) {
         return ResponseEntity.status(HttpStatus.CONFLICT)

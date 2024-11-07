@@ -1,10 +1,9 @@
 package com.koi151.QTDL.controller;
 
-import com.koi151.QTDL.model.request.OrderCreateRequest;
+import com.koi151.QTDL.model.request.create.OrderCreateRequest;
 import com.koi151.QTDL.model.response.ResponseData;
 import com.koi151.QTDL.service.OrderService;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
