@@ -11,6 +11,7 @@ import com.koi151.QTDL.model.request.update.RoleUpdateRequest;
 import com.koi151.QTDL.repository.RoleRepository;
 import com.koi151.QTDL.service.RoleService;
 import com.koi151.QTDL.validator.RoleValidator;
+import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,32 +24,52 @@ public class RoleServiceImpl implements RoleService {
     private final RoleMapper roleMapper;
     private final RoleValidator roleValidator;
 
-    @Override
-    @Transactional
-    public RoleDTO createRole(RoleCreateRequest request) {
-        roleValidator.validateRoleName(request.getRoleName());
 
-        Role role = Role.builder()
+    @Override
+    public RoleDTO createRole(RoleCreateRequest request) {    // Gọi stored procedure để tạo vai trò mới
+        Long newRoleId = roleRepository.createRole(
+            request.getRoleName(),
+            request.getDescription()
+        );
+
+        // Chuyển đổi Entity sang DTO và trả về
+        return RoleDTO.builder()
+            .roleId(newRoleId)
             .roleName(request.getRoleName())
             .description(request.getDescription())
             .build();
-
-        Role vt = roleRepository.save(role);
-        return roleMapper.toRoleDTO(vt);
     }
+
+//    @Override
+//    @Transactional
+//    public RoleDTO updateRole(Long roleId, RoleUpdateRequest request) {
+//        roleValidator.validateUpdateRoleName(request.getRoleName(), roleId);
+//
+//        Role existingRole = roleRepository.findById(roleId)
+//            .orElseThrow(() -> new EntityNotExistedException("Không tồn tại vai trò quản trị với id: " + roleId));
+//
+//        Role updatedRole =  roleMapper.updateRoleFromRequest(request, existingRole);
+//        Role savedRole = roleRepository.save(updatedRole);
+//
+//        return roleMapper.toRoleDTO(savedRole);
+//    }
 
     @Override
     @Transactional
     public RoleDTO updateRole(Long roleId, RoleUpdateRequest request) {
-        roleValidator.validateUpdateRoleName(request.getRoleName(), roleId);
+     // Gọi stored procedure để cập nhật thông tin role
+        roleRepository.updateRole(
+            roleId,
+            request.getRoleName(),
+            request.getDescription()
+        );
 
-        Role existingRole = roleRepository.findById(roleId)
-            .orElseThrow(() -> new EntityNotExistedException("Không tồn tại vai trò quản trị với id: " + roleId));
-
-        Role updatedRole =  roleMapper.updateRoleFromRequest(request, existingRole);
-        Role savedRole = roleRepository.save(updatedRole);
-
-        return roleMapper.toRoleDTO(savedRole);
+        // Trả về đối tượng RoleDTO
+        return RoleDTO.builder()
+            .roleId(roleId)
+            .roleName(request.getRoleName())
+            .description(request.getDescription())
+            .build();
     }
 
     @Override

@@ -9,7 +9,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Employee extends BaseEntity {
+public class Employee extends BaseEntityNoDefaultVal {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

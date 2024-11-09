@@ -18,6 +18,8 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+
 @Service
 @RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
@@ -57,22 +59,14 @@ public class ProductServiceImpl implements ProductService {
 //            .build();
 //    }
 
-    @Transactional
-    public ProductDTO createProduct(ProductCreateRequest request) {
-        // Kiểm tra tên sản phẩm trùng lặp
-        productValidator.validateProductName(request.getProductName());
-
-        // Gọi stored procedure để thêm sản phẩm mới
+    @Override
+    public ProductDTO createProduct(ProductCreateRequest request) {         // Gọi stored procedure để thêm sản phẩm mới
         productRepository.createProduct(
             request.getCategoryId(),
             request.getSupplierId(),
             request.getProductName(),
             request.getPrice()
         );
-
-        // Sử dụng flush và clear để đảm bảo thay đổi được đẩy vào cơ sở dữ liệu và làm mới cache
-        entityManager.flush();
-        entityManager.clear();
 
         // Lấy tên của category và supplier từ cơ sở dữ liệu
         String categoryName = productCategoryRepository.findById(request.getCategoryId())
@@ -91,6 +85,7 @@ public class ProductServiceImpl implements ProductService {
             .price(request.getPrice())
             .build();
     }
+
 
 
 
@@ -121,12 +116,9 @@ public class ProductServiceImpl implements ProductService {
 //        return productMapper.toProductDTO(savedProduct);
 //    }
 
+    @Override
     @Transactional
     public ProductDTO updateProduct(Long productId, ProductUpdateRequest request) {
-        // Kiểm tra sản phẩm có tồn tại không (sản phẩm bị xóa sẽ không thể cập nhật)
-        Product existingProduct = productRepository.findByProductIdAndDeleted(productId, false)
-            .orElseThrow(() -> new EntityNotExistedException("Không tồn tại sản phẩm với id: " + productId));
-
         // Kiểm tra tên sản phẩm trùng lặp (ngoại trừ sản phẩm hiện tại)
         productValidator.validateUpdateProductName(request.getProductName(), productId);
 
@@ -139,23 +131,26 @@ public class ProductServiceImpl implements ProductService {
             request.getPrice()
         );
 
-        // Sử dụng flush để đảm bảo các thay đổi đã được đẩy vào cơ sở dữ liệu
         entityManager.flush();
-        entityManager.clear(); // Xóa cache để lấy dữ liệu mới từ cơ sở dữ liệu
+        entityManager.clear();
 
-        // Lấy lại thông tin sản phẩm đã cập nhật
+        // Lấy lại thông tin sản phẩm đã cập nhật từ cơ sở dữ liệu
         Product updatedProduct = productRepository.findByProductIdAndDeleted(productId, false)
             .orElseThrow(() -> new EntityNotExistedException("Không tồn tại sản phẩm với id: " + productId));
 
-        // Chuyển đổi Product thành ProductDTO và trả về
-        return productMapper.toProductDTO(updatedProduct);
+        return ProductDTO.builder()
+            .categoryName(updatedProduct.getProductCategory().getCategoryName())
+            .supplierName(updatedProduct.getSupplier().getSupplierName())
+            .productName(updatedProduct.getProductName())
+            .price(updatedProduct.getPrice())
+            .build();
     }
 
 
 
 
 
-    @Override
+            @Override
     public void deleteProduct(Long id) {
         Product sp = productRepository.findById(id)
             .orElseThrow(() -> new EntityNotExistedException("Không tồn tại sản phẩm với id: " + id));

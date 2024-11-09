@@ -5,13 +5,13 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.List;
-@Entity(name = "order")
+@Entity(name = "`order`")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Order extends BaseEntity {
+public class Order extends BaseEntityNoDefaultVal {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -54,20 +54,13 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
 //        return productCategoryMapper.toCategoryDTO(categorySaved);
 //    }
 
-    @Transactional
+    @Override
     public ProductCategoryDTO createCategory(ProductCategoryCreateRequest request) {
-        // Kiểm tra tên danh mục trùng lặp
-        productCategoryValidator.validateCategoryName(request.getCategoryName());
-
         // Gọi stored procedure để thêm danh mục mới và lấy categoryId vừa tạo
         Long categoryId = productCategoryRepository.createCategory(
             request.getCategoryName(),
             request.getDescription()
         );
-
-        // Sử dụng flush và clear để đảm bảo thay đổi được lưu ngay lập tức và làm mới cache
-        entityManager.flush();
-        entityManager.clear();
 
         // Tạo đối tượng ProductCategoryDTO để trả về
         return ProductCategoryDTO.builder()
@@ -91,11 +84,8 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
 //        return productCategoryMapper.toCategoryDTO(savedCategory);
 //    }
 
-    @Transactional
+    @Override
     public ProductCategoryDTO updateCategory(Long categoryId, ProductCategoryUpdateRequest request) {
-        // Kiểm tra trùng lặp tên danh mục
-        productCategoryValidator.validateUpdateCategoryName(request.getCategoryName(), categoryId);
-
         // Gọi stored procedure để cập nhật danh mục
         productCategoryRepository.updateCategory(
             categoryId,
@@ -103,16 +93,11 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
             request.getDescription()
         );
 
-        // Sử dụng flush và clear để đảm bảo các thay đổi đã được lưu và làm mới cache
-        entityManager.flush();
-        entityManager.clear();
-
-        // Lấy lại thông tin danh mục đã cập nhật từ cơ sở dữ liệu
-        ProductCategory updatedCategory = productCategoryRepository.findByCategoryIdAndDeleted(categoryId, false)
-            .orElseThrow(() -> new EntityNotExistedException("Không tồn tại danh mục với id: " + categoryId));
-
-        // Trả về đối tượng ProductCategoryDTO
-        return productCategoryMapper.toCategoryDTO(updatedCategory);
+        return ProductCategoryDTO.builder()
+            .categoryId(categoryId)
+            .categoryName(request.getCategoryName())
+            .description(request.getDescription())
+            .build();
     }
 
 

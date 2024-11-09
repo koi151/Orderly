@@ -12,7 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ProductCategory extends BaseEntity {
+public class ProductCategory extends BaseEntityNoDefaultVal {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

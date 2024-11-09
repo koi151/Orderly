@@ -11,7 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Supplier extends BaseEntity {
+public class Supplier extends BaseEntityNoDefaultVal {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -11,7 +11,7 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Builder
-public class Agency extends BaseEntity {
+public class Agency extends BaseEntityNoDefaultVal {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -21,34 +21,74 @@ public class AgencyServiceImpl implements AgencyService {
     private final AgencyMapper agencyMapper;
     private final AgencyValidator agencyValidator;
 
-    @Override
-    @Transactional
-    public AgencyDTO createAgency(AgencyCreateRequest request) {
-        agencyValidator.validateAgencyName(request.getAgencyName());
+//    @Override
+//    @Transactional
+//    public AgencyDTO createAgency(AgencyCreateRequest request) {
+//        agencyValidator.validateAgencyName(request.getAgencyName());
+//
+//        Agency agency = Agency.builder()
+//            .agencyName(request.getAgencyName())
+//            .address(request.getAddress())
+//            .repInfo(request.getRepInfo())
+//            .phone(request.getPhone())
+//            .build();
+//
+//        Agency savedAgencyEntity = agencyRepository.save(agency);
+//        return agencyMapper.toAgencyDTO(savedAgencyEntity);
+//    }
 
-        Agency agency = Agency.builder()
+    @Override
+    public AgencyDTO createAgency(AgencyCreateRequest request) {
+        // Gọi stored procedure để tạo agency mới
+        Long agencyId = agencyRepository.createAgency(
+            request.getAgencyName(),
+            request.getPhone(),
+            request.getAddress(),
+            request.getRepInfo()
+        );
+
+        // Tạo đối tượng AgencyDTO để trả về
+        return AgencyDTO.builder()
+            .agencyId(agencyId)
             .agencyName(request.getAgencyName())
+            .phone(request.getPhone())
             .address(request.getAddress())
             .repInfo(request.getRepInfo())
-            .phone(request.getPhone())
             .build();
-
-        Agency savedAgencyEntity = agencyRepository.save(agency);
-        return agencyMapper.toAgencyDTO(savedAgencyEntity);
     }
 
+//    @Override
+//    @Transactional
+//    public AgencyDTO updateAgency(Long agencyId, AgencyUpdateRequest request) {
+//        agencyValidator.validateUpdateAgencyName(request.getAgencyName(), agencyId);
+//
+//        Agency existingAgency = agencyRepository.findById(agencyId)
+//            .orElseThrow(() -> new EntityNotExistedException("Không tồn tại đại lý với id: " + agencyId));
+//
+//        Agency updatedAgency = agencyMapper.updateAgencyFromRequest(request, existingAgency);
+//        Agency savedAgency = agencyRepository.save(updatedAgency);
+//
+//        return agencyMapper.toAgencyDTO(savedAgency);
+//    }
+
     @Override
-    @Transactional
     public AgencyDTO updateAgency(Long agencyId, AgencyUpdateRequest request) {
-        agencyValidator.validateUpdateAgencyName(request.getAgencyName(), agencyId);
+        // Gọi stored procedure để cập nhật thông tin agency
+        agencyRepository.updateAgency(
+            agencyId,
+            request.getAgencyName(),
+            request.getPhone(),
+            request.getAddress(),
+            request.getRepInfo()
+        );
 
-        Agency existingAgency = agencyRepository.findById(agencyId)
-            .orElseThrow(() -> new EntityNotExistedException("Không tồn tại đại lý với id: " + agencyId));
-
-        Agency updatedAgency = agencyMapper.updateAgencyFromRequest(request, existingAgency);
-        Agency savedAgency = agencyRepository.save(updatedAgency);
-
-        return agencyMapper.toAgencyDTO(savedAgency);
+        return AgencyDTO.builder()
+            .agencyId(agencyId)
+            .agencyName(request.getAgencyName())
+            .address(request.getAddress())
+            .phone(request.getPhone())
+            .repInfo(request.getRepInfo())
+            .build();
     }
 
     @Override

@@ -16,7 +16,6 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     Boolean existsByProductNameAndProductIdNot(String name, Long id);
     Optional<Product> findByProductIdAndDeleted(Long id, Boolean deleted);
 
-
     @Procedure(procedureName = "createProduct")
     void createProduct(
         @Param("p_category_id") Long categoryId,

@@ -12,5 +12,4 @@ public class SupplierDTO {
     private String supplierName;
     private String address;
     private String repInfo;
-    private List<ProductSummaryDTO> products;
 }
