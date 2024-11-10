@@ -1,6 +1,8 @@
 package com.koi151.QTDL.repository;
 
 import com.koi151.QTDL.entity.Agency;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.query.Procedure;
 import org.springframework.data.repository.query.Param;
@@ -8,6 +10,9 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface AgencyRepository extends JpaRepository<Agency, Long> {
+
+    Page<Agency> findAllByDeleted(Boolean deleted, Pageable pageable);
+
     @Procedure(procedureName = "createAgency")
     Long createAgency(
         @Param("p_agency_name") String agencyName,

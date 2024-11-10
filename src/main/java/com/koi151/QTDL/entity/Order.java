@@ -27,7 +27,7 @@ public class Order extends BaseEntityNoDefaultVal {
     private Employee employee;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<OrderDetail> dsOrderDetail;
+    private List<OrderDetail> orderDetails;
 
     @Column(name = "notes", columnDefinition = "TEXT")
     private String notes;

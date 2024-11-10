@@ -1,6 +1,8 @@
 package com.koi151.QTDL.repository;
 
 import com.koi151.QTDL.entity.Role;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.query.Procedure;
@@ -11,6 +13,9 @@ import java.util.Optional;
 
 @Repository
 public interface RoleRepository extends JpaRepository<Role, Long> {
+
+    Page<Role> findAllByDeleted(Boolean deleted, Pageable pageable);
+
     @Procedure(procedureName = "createRole")
     Long createRole(
         @Param("p_role_name") String roleName,

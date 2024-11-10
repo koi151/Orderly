@@ -14,6 +14,8 @@ import com.koi151.QTDL.validator.RoleValidator;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -21,9 +23,16 @@ import org.springframework.stereotype.Service;
 public class RoleServiceImpl implements RoleService {
 
     private final RoleRepository roleRepository;
-    private final RoleMapper roleMapper;
-    private final RoleValidator roleValidator;
 
+    @Override
+    public Page<RoleDTO> findRoles(Pageable pageable) {
+        return roleRepository.findAllByDeleted(false, pageable)
+            .map(role -> RoleDTO.builder()
+                .roleId(role.getRoleId())
+                .roleName(role.getRoleName())
+                .description(role.getDescription())
+                .build());
+    }
 
     @Override
     public RoleDTO createRole(RoleCreateRequest request) {    // Gọi stored procedure để tạo vai trò mới

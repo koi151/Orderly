@@ -7,7 +7,7 @@ import com.koi151.QTDL.entity.Order;
 import com.koi151.QTDL.entity.Employee;
 import com.koi151.QTDL.entity.keys.OrderDetailKey;
 import com.koi151.QTDL.enums.OrderStatusEnum;
-import com.koi151.QTDL.model.dto.OrderCreateDTO;
+import com.koi151.QTDL.model.dto.OrderDetailsDTO;
 import com.koi151.QTDL.model.request.create.OrderCreateRequest;
 import com.koi151.QTDL.repository.AgencyRepository;
 import com.koi151.QTDL.repository.OrderRepository;
@@ -16,6 +16,8 @@ import com.koi151.QTDL.repository.ProductRepository;
 import com.koi151.QTDL.service.OrderService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -30,8 +32,21 @@ public class OrderServiceImpl implements OrderService {
     private final ProductRepository productRepository;
 
     @Override
+    public Page<OrderDetailsDTO> findOrders(Pageable pageable) {
+        return orderRepository.findAllByDeleted(false, pageable)
+            .map(order -> OrderDetailsDTO.builder()
+                .orderId(order.getOrderId())
+                .agencyName(order.getAgency().getAgencyName())
+                .status(order.getStatus().name())
+                .notes(order.getNotes())
+                .phone(order.getEmployee().getPhone())
+                .employeeName(order.getEmployee().getFullName())
+                .build());
+    }
+
+    @Override
     @Transactional
-    public OrderCreateDTO createOrder(OrderCreateRequest request) {
+    public OrderDetailsDTO createOrder(OrderCreateRequest request) {
         Agency agency = agencyRepository.findById(request.getAgencyId())
             .orElseThrow(() -> new EntityNotExistedException("Không tìm thấy đại lý với mã: " + request.getAgencyId()));
 
@@ -42,7 +57,7 @@ public class OrderServiceImpl implements OrderService {
             .agency(agency)
             .employee(employee)
             .notes(request.getNotes())
-            .dsOrderDetail(new ArrayList<>())
+            .orderDetails(new ArrayList<>())
             .status(OrderStatusEnum.processing)
             .build();
 
@@ -55,15 +70,14 @@ public class OrderServiceImpl implements OrderService {
                 .orderDetailKey(ctDatHangKey)
                 .order(order)
                 .product(product)
-                .deliveryDate(detailedRequest.getDeliveryDate())
                 .quantity(detailedRequest.getQuantity())
                 .build();
 
-            order.getDsOrderDetail().add(ctDatHang);
+            order.getOrderDetails().add(ctDatHang);
         });
 
         Order savedOrderEntity = orderRepository.save(order);
-        return OrderCreateDTO.builder()
+        return OrderDetailsDTO.builder()
             .orderId(savedOrderEntity.getOrderId())
             .agencyName(savedOrderEntity.getAgency().getAgencyName())
             .employeeName(savedOrderEntity.getEmployee().getFullName())

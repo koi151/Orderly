@@ -12,6 +12,8 @@ import com.koi151.QTDL.validator.SupplierValidator;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -36,6 +38,17 @@ public class SupplierServiceImpl implements SupplierService {
 //        Supplier savedNCCEntity = supplierRepository.save(ncc);
 //        return supplierMapper.toSupplierCreateDTO(savedNCCEntity);
 //    }
+
+    @Override
+    public Page<SupplierDTO> findSuppliers(Pageable pageable) {
+        return supplierRepository.findAllByDeleted(false, pageable)
+            .map(supplier -> SupplierDTO.builder()
+                .supplierId(supplier.getSupplierId())
+                .supplierName(supplier.getSupplierName())
+                .address(supplier.getAddress())
+                .repInfo(supplier.getRepInfo())
+                .build());
+    }
 
     @Override
     public SupplierDTO createSupplier(SupplierRequest request) {

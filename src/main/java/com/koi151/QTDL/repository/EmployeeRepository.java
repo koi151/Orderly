@@ -1,6 +1,10 @@
 package com.koi151.QTDL.repository;
 
 import com.koi151.QTDL.entity.Employee;
+import com.koi151.QTDL.entity.ProductCategory;
+import com.koi151.QTDL.model.dto.EmployeeDTO;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.query.Procedure;
 import org.springframework.data.repository.query.Param;
@@ -11,6 +15,8 @@ import java.util.Optional;
 
 @Repository
 public interface EmployeeRepository extends JpaRepository<Employee, Long> {
+
+    Page<Employee> findAllByDeleted(Boolean deleted, Pageable pageable);
 
     @Procedure(procedureName = "createEmployee")
     Long createEmployee(

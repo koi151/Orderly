@@ -11,6 +11,8 @@ import com.koi151.QTDL.service.AgencyService;
 import com.koi151.QTDL.validator.AgencyValidator;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -36,6 +38,19 @@ public class AgencyServiceImpl implements AgencyService {
 //        Agency savedAgencyEntity = agencyRepository.save(agency);
 //        return agencyMapper.toAgencyDTO(savedAgencyEntity);
 //    }
+
+    @Override
+    public Page<AgencyDTO> findAgencies(Pageable pageable) {
+        return agencyRepository.findAllByDeleted(false, pageable)
+            .map(agency -> AgencyDTO.builder()
+                .agencyId(agency.getAgencyId())
+                .agencyName(agency.getAgencyName())
+                .phone(agency.getPhone())
+                .address(agency.getAddress())
+                .repInfo(agency.getRepInfo())
+                .build()
+            );
+    }
 
     @Override
     public AgencyDTO createAgency(AgencyCreateRequest request) {

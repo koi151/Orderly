@@ -17,6 +17,8 @@ import com.koi151.QTDL.validator.EmployeeValidator;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -50,6 +52,17 @@ public class EmployeeServiceImpl implements EmployeeService {
 //        Employee savedNV = employeeRepository.save(nv);
 //        return employeeMapper.toEmployeeDTO(savedNV);
 //    }
+
+    public Page<EmployeeDTO> findEmployees(Pageable pageable) {
+        return employeeRepository.findAllByDeleted(false, pageable)
+            .map(employee -> EmployeeDTO.builder()
+                .employeeId(employee.getEmployeeId())
+                .fullName(employee.getFullName())
+                .email(employee.getEmail())
+                .phone(employee.getPhone())
+                .build()
+            );
+    }
 
     @Override
     public EmployeeDTO createEmployee(EmployeeCreateRequest request) {

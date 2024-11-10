@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class OrderCreateDTO {
+public class OrderDetailsDTO {
     private long orderId;
     private String agencyName;
     private String employeeName;

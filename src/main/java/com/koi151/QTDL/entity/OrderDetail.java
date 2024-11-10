@@ -30,9 +30,6 @@ public class OrderDetail {
     @Column(name = "quantity", nullable = false)
     private int quantity;
 
-    @Column(name = "deliveryDate", columnDefinition = "TIMESTAMP")
-    private LocalDateTime deliveryDate;
-
 //    @Column(name = "donGia", precision = 10)
 //    private BigDecimal donGia;
 }

@@ -18,6 +18,4 @@ public class OrderDetailRequest {
     @NotNull(message = "Số lượng sản phẩm không được trống")
     @Min(value = 0, message = "Số lượng sản phẩm phải lớn hơn 0")
     private Integer quantity;
-
-    LocalDateTime deliveryDate;
 }
