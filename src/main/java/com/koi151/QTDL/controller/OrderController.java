@@ -2,6 +2,8 @@ package com.koi151.QTDL.controller;
 
 import com.koi151.QTDL.mapper.ResponseDataMapper;
 import com.koi151.QTDL.model.request.create.OrderCreateRequest;
+import com.koi151.QTDL.model.request.update.OrderUpdateRequest;
+import com.koi151.QTDL.model.request.update.ProductUpdateRequest;
 import com.koi151.QTDL.model.response.ResponseData;
 import com.koi151.QTDL.service.OrderService;
 import jakarta.validation.Valid;
@@ -50,6 +52,16 @@ public class OrderController {
                 .desc("Tạo thành công đơn đặt hàng, mã đơn: " + accountCreated.getOrderId())
                 .build()
             , HttpStatus.CREATED);
+    }
+
+    @PatchMapping("/{productId}")
+    public ResponseEntity<ResponseData> updateOrder(@PathVariable Long productId,
+                                      @Valid @RequestBody OrderUpdateRequest request) {
+        var updatedOrder = orderService.patchUpdateOrder(productId, request);
+        return ResponseEntity.ok(ResponseData.builder()
+            .data(updatedOrder)
+            .desc("Cập nhật thành công thông tin đơn đặt hàng mã: " + updatedOrder.getOrderId())
+            .build());
     }
 
     @DeleteMapping("/{id}")

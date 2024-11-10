@@ -1,5 +1,6 @@
 package com.koi151.QTDL.model.request.update;
 
+import com.koi151.QTDL.enums.OrderStatusEnum;
 import com.koi151.QTDL.model.request.OrderDetailRequest;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -20,6 +21,8 @@ public class OrderUpdateRequest {
 
     @NotNull(message = "Yêu cầu đặt hàng cần có mã mã nhân viên")
     private Long employeeId;
+
+    private OrderStatusEnum status;
 
     @Valid
     private List<OrderDetailRequest> orderDetails;
