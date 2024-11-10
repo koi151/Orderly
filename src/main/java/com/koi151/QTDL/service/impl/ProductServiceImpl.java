@@ -2,23 +2,29 @@ package com.koi151.QTDL.service.impl;
 
 import com.koi151.QTDL.customExceptions.EntityNotExistedException;
 import com.koi151.QTDL.entity.Product;
-import com.koi151.QTDL.entity.ProductCategory;
-import com.koi151.QTDL.entity.Supplier;
+import com.koi151.QTDL.entity.view.ProductDetailsView;
 import com.koi151.QTDL.mapper.ProductMapper;
 import com.koi151.QTDL.model.dto.ProductDTO;
+import com.koi151.QTDL.model.dto.ProductDTODetails;
 import com.koi151.QTDL.model.request.create.ProductCreateRequest;
+import com.koi151.QTDL.model.request.search.ProductSearchRequest;
 import com.koi151.QTDL.model.request.update.ProductUpdateRequest;
 import com.koi151.QTDL.repository.ProductCategoryRepository;
 import com.koi151.QTDL.repository.SupplierRepository;
 import com.koi151.QTDL.repository.ProductRepository;
+import com.koi151.QTDL.repository.view.ProductDetailsViewRepository;
 import com.koi151.QTDL.service.ProductService;
+import com.koi151.QTDL.specification.ProductDetailsSpecification;
 import com.koi151.QTDL.validator.ProductValidator;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-
-import java.math.BigDecimal;
 
 @Service
 @RequiredArgsConstructor
@@ -26,10 +32,67 @@ public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
     private final ProductCategoryRepository productCategoryRepository;
+    private final ProductDetailsViewRepository productDetailsViewRepository;
+
     private final SupplierRepository supplierRepository;
     private final ProductValidator productValidator;
     private final ProductMapper productMapper;
     private final EntityManager entityManager;
+
+    private static final String DEFAULT_SORT_FIELD = "createdAt"; // Tên thuộc tính camelCase trong Entity
+    private static final int DEFAULT_PAGE_SIZE = 10;
+    private static final int MAX_PAGE_SIZE = 100;
+
+
+    // SORT ======================
+    @Override
+    public Page<ProductDTODetails> getProducts(ProductSearchRequest request, Pageable pageable) {
+        // Xây dựng Specification dựa trên yêu cầu tìm kiếm
+        Specification<ProductDetailsView> spec = Specification.where(
+            ProductDetailsSpecification.hasProductId(request.getProductId())
+            .and(ProductDetailsSpecification.hasProductNameLike(request.getProductName()))
+            .and(ProductDetailsSpecification.hasCategoryNameLike(request.getCategoryName()))
+            .and(ProductDetailsSpecification.hasSupplierNameLike(request.getSupplierName()))
+            .and(ProductDetailsSpecification.hasPriceEqualTo(request.getPrice()))
+            .and(ProductDetailsSpecification.hasPriceGreaterThanOrEqualTo(request.getMinPrice()))
+            .and(ProductDetailsSpecification.hasPriceLessThanOrEqualTo(request.getMaxPrice()))
+        );
+
+        // Kiểm tra và xác thực sortField để ngăn chặn SQL Injection
+        String sortField = request.getSortField();
+        if (!isValidSortField(sortField)) {
+            sortField = DEFAULT_SORT_FIELD; // Sử dụng sortField mặc định nếu không hợp lệ
+        }
+
+        // Áp dụng sắp xếp
+        Sort sort = Sort.by(
+            "DESC".equalsIgnoreCase(request.getSortDirection()) ? Sort.Direction.DESC : Sort.Direction.ASC,
+            sortField
+        );
+
+        Pageable sortedPageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
+
+        // Thực hiện truy vấn với Specification và Pageable đã cấu hình
+        Page<ProductDetailsView> retrievedProducts = productDetailsViewRepository.findAll(spec, sortedPageable);
+
+        // Chuyển đổi Page<ProductDetailsView> sang Page<ProductDetailsDTO>
+        return retrievedProducts.map(product -> ProductDTODetails.builder()
+            .productId(product.getProductId())
+            .productName(product.getProductName())
+            .price(product.getPrice())
+            .categoryName(product.getCategoryName())
+            .supplierName(product.getSupplierName())
+            .createdAt(product.getCreatedAt())
+            .build();
+    }
+
+    private boolean isValidSortField(String sortField) {
+        return sortField != null && (
+            sortField.equals("createdAt") ||
+                sortField.equals("productName") ||
+                sortField.equals("price")
+        );
+    }
 
 
 //    @Override
@@ -85,8 +148,6 @@ public class ProductServiceImpl implements ProductService {
             .price(request.getPrice())
             .build();
     }
-
-
 
 
 //    @Override
@@ -146,11 +207,8 @@ public class ProductServiceImpl implements ProductService {
             .build();
     }
 
-
-
-
-
-            @Override
+    //
+    @Override
     public void deleteProduct(Long id) {
         Product sp = productRepository.findById(id)
             .orElseThrow(() -> new EntityNotExistedException("Không tồn tại sản phẩm với id: " + id));

@@ -26,6 +26,7 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
 
     private final ProductCategoryRepository productCategoryRepository;
     private final ProductCategoryMapper productCategoryMapper;
+
     private final ProductCategoryValidator productCategoryValidator;
     private final EntityManager entityManager;
 
@@ -117,4 +118,5 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
                 + " sản phẩm. Sửa danh mục các sản phẩm trên trước khi xóa danh mục với id: " + id);
         }
     }
+
 }

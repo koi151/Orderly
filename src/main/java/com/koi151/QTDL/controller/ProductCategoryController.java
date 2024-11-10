@@ -26,7 +26,7 @@ public class ProductCategoryController {
     private static final int MAX_PAGE_SIZE = 20;
 
     @GetMapping("/")
-    public ResponseEntity<ResponseData> findProperties (
+    public ResponseEntity<ResponseData> findCategories (
         @RequestParam(required = false, defaultValue = "1") int page,
         @RequestParam(required = false, defaultValue = "10") int limit,
         @RequestBody(required = false) @Valid ProductCategorySearchRequest request)
