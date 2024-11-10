@@ -36,13 +36,8 @@ public class ProductServiceImpl implements ProductService {
 
     private final SupplierRepository supplierRepository;
     private final ProductValidator productValidator;
-    private final ProductMapper productMapper;
     private final EntityManager entityManager;
-
     private static final String DEFAULT_SORT_FIELD = "createdAt"; // Tên thuộc tính camelCase trong Entity
-    private static final int DEFAULT_PAGE_SIZE = 10;
-    private static final int MAX_PAGE_SIZE = 100;
-
 
     // SORT ======================
     @Override
@@ -83,7 +78,7 @@ public class ProductServiceImpl implements ProductService {
             .categoryName(product.getCategoryName())
             .supplierName(product.getSupplierName())
             .createdAt(product.getCreatedAt())
-            .build();
+            .build());
     }
 
     private boolean isValidSortField(String sortField) {

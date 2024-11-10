@@ -18,7 +18,7 @@ public class OrderCreateRequest {
     @NotNull(message = "Yêu cầu đặt hàng cần có mã đại lý")
     private Long agencyId;
 
-    @NotNull(message = "Yêu cầu đặt hàng cần có mã mã nhân viên")
+    @NotNull(message = "Yêu cầu đặt hàng cần có mã nhân viên")
     private Long employeeId;
 
     @Valid
