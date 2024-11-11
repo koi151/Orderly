@@ -15,6 +15,10 @@ public class EmployeeValidator {
     private final EmployeeRepository employeeRepository;
 
     public void validateEmployeeRequest(EmployeeCreateRequest request)  {
+        if(employeeRepository.existsEmployeeByEmail(request.getEmail())) {
+            throw new InvalidRequestException("Email đã tồn tại");
+        }
+
         if (!request.getRetypePassword().equals(request.getPassword())) {
             throw new PasswordMismatchException("Mật khẩu xác thực không khớp");
         }
