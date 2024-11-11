@@ -15,7 +15,7 @@ import java.util.Optional;
 
 @Repository
 public interface EmployeeRepository extends JpaRepository<Employee, Long> {
-
+    Optional<Employee> findByEmailAndDeletedFalse(String email);
     Page<Employee> findAllByDeleted(Boolean deleted, Pageable pageable);
 
     @Procedure(procedureName = "createEmployee")

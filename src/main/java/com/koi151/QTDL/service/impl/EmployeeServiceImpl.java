@@ -1,14 +1,17 @@
 package com.koi151.QTDL.service.impl;
 
 
+import com.koi151.QTDL.config.JwtTokenProvider;
 import com.koi151.QTDL.customExceptions.EntityNotExistedException;
 import com.koi151.QTDL.entity.*;
 import com.koi151.QTDL.mapper.EmployeeMapper;
 import com.koi151.QTDL.model.dto.EmployeeDTO;
 import com.koi151.QTDL.model.dto.ProductDTO;
+import com.koi151.QTDL.model.request.EmployeeLoginRequest;
 import com.koi151.QTDL.model.request.create.EmployeeCreateRequest;
 import com.koi151.QTDL.model.request.update.EmployeeUpdateRequest;
 import com.koi151.QTDL.model.request.update.ProductUpdateRequest;
+import com.koi151.QTDL.model.response.LoginResponseDTO;
 import com.koi151.QTDL.repository.EmployeeRepository;
 import com.koi151.QTDL.repository.RoleRepository;
 import com.koi151.QTDL.service.EmployeeService;
@@ -19,7 +22,10 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -31,6 +37,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     private final PasswordEncoderUtil encoderUtil;
     private final EmployeeValidator employeeValidator;
     private final EntityManager entityManager;
+    private final JwtTokenProvider jwtTokenProvider;
 
 //    @Override
 //    @Transactional
@@ -52,6 +59,37 @@ public class EmployeeServiceImpl implements EmployeeService {
 //        Employee savedNV = employeeRepository.save(nv);
 //        return employeeMapper.toEmployeeDTO(savedNV);
 //    }
+
+    @Override
+    public Optional<LoginResponseDTO> login(EmployeeLoginRequest loginReq) {
+        Employee user = employeeRepository.findByEmailAndDeletedFalse(loginReq.getEmail())
+            .orElseThrow(() -> new EntityNotExistedException("Email không tồn tại"));
+
+        // Kiểm tra mật khẩu
+        if (encoderUtil.matches(loginReq.getPassword(), user.getPassword())) {
+            // Tạo token nếu đăng nhập thành công
+            String token = jwtTokenProvider.generateToken(user.getEmail());
+
+            // Chuyển đổi thông tin người dùng sang EmployeeDTO
+            EmployeeDTO employeeDTO = EmployeeDTO.builder()
+                .employeeId(user.getEmployeeId())
+                .fullName(user.getFullName())
+                .email(user.getEmail())
+                .phone(user.getPhone())
+                .build();
+
+            // Tạo đối tượng LoginResponseDTO với token và thông tin người dùng
+            LoginResponseDTO responseDTO = LoginResponseDTO.builder()
+                .token(token)
+                .employee(employeeDTO)
+                .build();
+
+            return Optional.of(responseDTO);
+        }
+
+        // Trả về Optional rỗng nếu mật khẩu không đúng
+        return Optional.empty();
+    }
 
     public Page<EmployeeDTO> findEmployees(Pageable pageable) {
         return employeeRepository.findAllByDeleted(false, pageable)

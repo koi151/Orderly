@@ -31,3 +31,6 @@ logging:
           descriptor:
             sql:
               BasicBinder: TRACE
+app:
+  jwtSecret: kekjrvkecqf3fccewfefefwefcjbwekmnpoipnkhgjhrxijmmefergetgrtgrvgrhreurieirwkmekewneruwhkjnkwuehkcbmsfvbf
+  jwtExpirationMs: 86400000 # Thời gian hết hạn của token (ms)

@@ -25,7 +25,6 @@ public class EmployeeController {
     private final ResponseDataMapper responseDataMapper;
     private static final int MAX_PAGE_SIZE = 20;
 
-
     @GetMapping("/")
     public ResponseEntity<ResponseData> findEmployees (
         @RequestParam(required = false, defaultValue = "1") int page,
