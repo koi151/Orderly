@@ -15,15 +15,14 @@ public class EmployeeCreateRequest {
     @Pattern(regexp = "^[a-zA-Z\\s]+$", message = "Họ và tên không được chứa số hoặc kí tự đặc biệt")
     private String fullName;
 
-    @NotNull(message = "Mã vai trò quản trị không được để trống")
-    private Long roleId;
+    private Long roleId = 1L;
 
     @Email(message = "Email không hợp lệ")
     @Size(max = 100, message = "Email không được vượt quá {max} kí tự")
     private String email;
 
     @NotBlank(message = "Thiếu số điện thoại")
-    @Size(max = 100, message = "Số điện thoại không được vượt quá {max} kkí tự")
+    @Size(max = 100, message = "Số điện thoại không được vượt quá {max} kí tự")
     private String phone;
 
     @NotBlank(message = "Mật khẩu không hợp lệ")
