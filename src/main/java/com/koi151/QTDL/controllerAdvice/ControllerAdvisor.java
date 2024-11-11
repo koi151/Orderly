@@ -38,6 +38,16 @@ public class ControllerAdvisor {
     }
 
 
+    @ExceptionHandler(InvalidTokenException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidTokenException(InvalidTokenException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+            .body(ErrorResponse.builder()
+                .error("Token không hợp lệ")
+                .details(Collections.singletonList(ex.getMessage()))
+                .build());
+    }
+
+
     @ExceptionHandler(SQLException.class)
     public ResponseEntity<ErrorResponse> handleSQLException(SQLException ex) {
         String errorMessage = ex.getMessage();
