@@ -151,6 +151,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 //    }
 
     @Override
+    @Transactional
     public EmployeeDTO updateEmployee(Long employeeId, EmployeeUpdateRequest request) {
         // Kiểm tra xem nhân viên có tồn tại không
         Employee existingEmployee = employeeRepository.findByEmployeeIdAndDeleted(employeeId, false)
